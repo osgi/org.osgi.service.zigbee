@@ -1,5 +1,4 @@
 # Set javac settings from JDT prefs
--include: ${includes}/jdt.bnd, ${includes}/osgi.tck.junit-platform.bnd, ${includes}/tck.bnd, ${includes}/cmpn.bnd
 
 Bundle-Description					= ZigBee Test Bundle
 
@@ -19,29 +18,16 @@ Import-Package: \
  org.osgi.service.zigbee.descriptors, \
  org.osgi.service.zigbee.types
 
--buildpath = \
-	org.osgi.test.support;version=project,\
-    org.osgi.framework;maven-scope=provided;version=1.8, \
-    org.osgi.util.tracker;maven-scope=provided;version=1.5, \
-	org.osgi.service.zigbee;version=latest,\
-	org.osgi.service.device;version=1.1,\
-	org.osgi.util.function;version=1.0,\
-	org.osgi.util.promise;version=1.0
+p: org.osgi.test.cases.zigbee
 
--runbundles = \
-	org.osgi.service.zigbee;version=latest,\
-	org.osgi.util.function;version=latest,\
-	org.osgi.util.promise;version=latest,\
-	org.osgi.impl.service.cm;version=latest,\
-	org.osgi.impl.service.event;version=latest,\
-	org.osgi.impl.service.zigbee;version=latest
+# Maven build: workspace includes replaced inline (from cnf/includes and build.bnd in osgi/osgi)
+# -make.maven, not -make: the key is a map entry and would displace
+# a project-level -make (webcontainer also builds .war recipes this
+# way). bnd merges all -make.* entries.
+-make.maven: (*).(jar); type=bnd; recipe="bnd/$1.bnd"
 
--runproperties = ${runproperties}, \
-    comm.rxtx.disable=true, \
-	org.osgi.test.cases.zigbee.template=${.}/zigbee-tck-template.xml, \
-	org.osgi.impl.service.zigbee.zcl=${.}/zcl.xml, \
-	org.osgi.service.zigbee.host.path=:testcase:, \
-	org.osgi.service.zigbee.loglevel.debug=true, \
-	org.osgi.service.zigbee.loglevel.warn=true, \
-	org.osgi.service.zigbee.loglevel.info=true, \
-	org.osgi.service.zigbee.loglevel.error=true
+testcases.junit3: ${classes;EXTENDS;junit.framework.TestCase;CONCRETE}
+testcases.junit4: ${classes;HIERARCHY_ANNOTATED;org.junit.Test;CONCRETE}
+testcases.junit5: ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
+Test-Cases: ${sort;${uniq;${testcases.junit3};${testcases.junit4};${testcases.junit5}}}
+-plugin.signaturetest: SignatureTest
