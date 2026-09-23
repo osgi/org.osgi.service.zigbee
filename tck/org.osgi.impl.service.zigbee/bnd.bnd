@@ -1,0 +1,9 @@
+# Set javac settings from JDT prefs
+
+Bundle-Vendor				= Orange and TIM
+Bundle-Activator			= ${p}.ZigBeeBundleActivator
+Bundle-Description			= The ZigBee bundle with Control Point stack
+
+-privatepackage = ${p}.*
+
+p: org.osgi.impl.service.zigbee
