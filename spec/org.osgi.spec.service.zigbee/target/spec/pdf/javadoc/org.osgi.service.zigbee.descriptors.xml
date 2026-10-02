@@ -1,0 +1,966 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xreflabel="org.osgi.service.zigbee.descriptors"
+         version="5"
+         role="package"
+         xml:id="org.osgi.service.zigbee.descriptors">
+   <title>org.osgi.service.zigbee.descriptors</title>
+   <info>
+      <releaseinfo xml:id="org.osgi.service.zigbee.descriptors-version">Version 1.0</releaseinfo>
+      <edition xml:id="org.osgi.service.zigbee.descriptors-version.number">1.0</edition>
+   </info>
+   <para>
+Device Service Specification for ZigBee Technology Descriptors.
+ 
+ </para>
+   <para>
+ This package contains the interfaces representing the ZigBee descriptors and
+ the fields defined inside some of them.
+ 
+ </para>
+   <para>
+ An interface for modeling the ZigBee User Descriptor is missing because this
+ descriptor has only one field (the UserDescription). Therefore this field can
+ be read and written using respectively the
+ {@link org.osgi.service.zigbee.ZigBeeNode#getUserDescription()} and the
+ {@link org.osgi.service.zigbee.ZigBeeNode#setUserDescription(String)}
+ methods.
+ 
+ </para>
+   <para>
+ The {@link org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor}, 
+ {@link org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor} and the
+ {@link org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor} are read 
+ using the appropriate methods in the
+ {@link org.osgi.service.zigbee.ZigBeeNode} interface, whereas the
+ ZigBeeSimpleDescriptor can be read using the appropriate method of the
+ {@link org.osgi.service.zigbee.ZigBeeEndpoint} services registered in the
+ framework.
+ 
+ </para>
+   <para>
+ Bundles wishing to use this package must list the package in the
+ Import-Package header of the bundle's manifest. This package has two types of
+ users: the consumers that use the API in this package and the providers that
+ implement the API in this package.
+ 
+ </para>
+   <para>
+ Example import for consumers using the API in this package:
+ </para>
+   <para>
+ {@code  Import-Package: org.osgi.service.zigbee.descriptors; version="[1.0,2.0)"}
+ </para>
+   <para>
+ Example import for providers implementing the API in this package:
+ </para>
+   <para>
+ {@code  Import-Package: org.osgi.service.zigbee.descriptors; version="[1.0,1.1)"}</para>
+   <section role="summary">
+      <title>Summary</title>
+      <itemizedlist>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor">
+                  <code>ZigBeeComplexDescriptor</code>
+               </link> - 
+This interface represents a Complex Descriptor as described in the ZigBee
+ Specification.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand">
+                  <code>ZigBeeFrequencyBand</code>
+               </link> - 
+This interface represents a the frequency band field.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags">
+                  <code>ZigBeeMacCapabiliyFlags</code>
+               </link> - 
+This interface represents the Node Descriptor MAC Capability Flags as
+ described in the ZigBee Specification.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor">
+                  <code>ZigBeeNodeDescriptor</code>
+               </link> - 
+This interface represents a Node Descriptor as described in the ZigBee
+ Specification.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor">
+                  <code>ZigBeePowerDescriptor</code>
+               </link> - 
+This interface represents a power descriptor as described in the ZigBee
+ Specification.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptors.ZigBeeServerMask">
+                  <code>ZigBeeServerMask</code>
+               </link> - 
+Represents the ZigBee Server Mask field of the ZigBee Node Descriptor.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor">
+                  <code>ZigBeeSimpleDescriptor</code>
+               </link> - 
+This interface represents a simple descriptor as described in the ZigBee
+ Specification.
+   </para>
+         </listitem>
+      </itemizedlist>
+   </section>
+   <section xreflabel="ZigBeeComplexDescriptor"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor">
+      <title>public abstract ZigBeeComplexDescriptor</title>
+      <para>
+This interface represents a Complex Descriptor as described in the ZigBee
+ Specification.
+ </para>
+      <para>
+ The Complex Descriptor contains extended information for each of the device
+ descriptions contained in the node. The use of the Complex Descriptor is
+ optional.</para>
+      <formalpara role="parameter">
+         <title>No Implement</title>
+         <para>Consumers of this API must not implement this interface</para>
+      </formalpara>
+      <section xreflabel="getCharacterSetIdentifier()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getCharacterSetIdentifier--">
+         <title>public abstract String getCharacterSetIdentifier()</title>
+         <para role="description">
+Returns the encoding used by characters in the character set.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the encoding used by characters in the character set.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getDeviceURL()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getDeviceURL--">
+         <title>public abstract String getDeviceURL()</title>
+         <para role="description">
+Returns the Device URL.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the Device URL.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getIcon()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getIcon--">
+         <title>public abstract byte[][] getIcon()</title>
+         <para role="description">
+Returns the icon field.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the icon field.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getIconURL()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getIconURL--">
+         <title>public abstract String getIconURL()</title>
+         <para role="description">
+Returns the icon URL.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the icon URL.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getLanguageCode()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getLanguageCode--">
+         <title>public abstract String getLanguageCode()</title>
+         <para role="description">
+Returns the language code used for character strings.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the language code used for character strings.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getManufacturerName()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getManufacturerName--">
+         <title>public abstract String getManufacturerName()</title>
+         <para role="description">
+Returns the manufacturer name.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the manufacturer name.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getModelName()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getModelName--">
+         <title>public abstract String getModelName()</title>
+         <para role="description">
+Returns the model name.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the model name.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getSerialNumber()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor.getSerialNumber--">
+         <title>public abstract String getSerialNumber()</title>
+         <para role="description">
+Returns the serial number.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the serial number.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZigBeeFrequencyBand"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand">
+      <title>public abstract ZigBeeFrequencyBand</title>
+      <para>
+This interface represents a the frequency band field.
+   </para>
+      <formalpara role="parameter">
+         <title>No Implement</title>
+         <para>Consumers of this API must not implement this interface</para>
+      </formalpara>
+      <section xreflabel="is2400()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand.is2400--">
+         <title>public abstract boolean is2400()</title>
+         <para role="description">
+Checks if the radio band is 2.4GHz.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if and only if the radio is operating in the
+         frequency band 2400MHz to 2483MHz.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="is868()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand.is868--">
+         <title>public abstract boolean is868()</title>
+         <para role="description">
+Checks if the radio band is 868MHz.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if and only if the radio is operating in the
+         frequency band 868 to 868.6 MHz.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="is915()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeFrequencyBand.is915--">
+         <title>public abstract boolean is915()</title>
+         <para role="description">
+Checks if the radio band is 900MHz.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if and only if the radio is operating in the
+         frequency band 908MHz to 928MHz.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZigBeeMacCapabiliyFlags"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags">
+      <title>public abstract ZigBeeMacCapabiliyFlags</title>
+      <para>
+This interface represents the Node Descriptor MAC Capability Flags as
+ described in the ZigBee Specification.
+   </para>
+      <formalpara role="parameter">
+         <title>No Implement</title>
+         <para>Consumers of this API must not implement this interface</para>
+      </formalpara>
+      <section xreflabel="isAddressAllocate()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags.isAddressAllocate--">
+         <title>public abstract boolean isAddressAllocate()</title>
+         <para role="description">
+Checks if the device is address allocate.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if the device is address allocate or false otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isAlternatePANCoordinator()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags.isAlternatePANCoordinator--">
+         <title>public abstract boolean isAlternatePANCoordinator()</title>
+         <para role="description">
+Checks if this node is capable of becoming PAN coordinator.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if this node is capable of becoming PAN coordinator or false
+         otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isFullFunctionDevice()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags.isFullFunctionDevice--">
+         <title>public abstract boolean isFullFunctionDevice()</title>
+         <para role="description">
+Checks if this node a Full Function Device (FFD).
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if this node a Full Function Device (FFD), false otherwise
+         (it is a Reduced Function Device, RFD).</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isMainsPower()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags.isMainsPower--">
+         <title>public abstract boolean isMainsPower()</title>
+         <para role="description">
+Checks if the current power source is mains power.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if the current power source is mains power or false
+         otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isReceiverOnWhenIdle()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags.isReceiverOnWhenIdle--">
+         <title>public abstract boolean isReceiverOnWhenIdle()</title>
+         <para role="description">
+Checks if the device does not disable its receiver to conserve power
+ during idle periods.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if the device does not disable its receiver to conserve
+         power during idle periods or false otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isSecurityCapable()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeMacCapabiliyFlags.isSecurityCapable--">
+         <title>public abstract boolean isSecurityCapable()</title>
+         <para role="description">
+Checks if the device is capable of sending and receiving secured frames
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if the device is capable of sending and receiving secured
+         frames or false otherwise.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZigBeeNodeDescriptor"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor">
+      <title>public abstract ZigBeeNodeDescriptor</title>
+      <para>
+This interface represents a Node Descriptor as described in the ZigBee
+ Specification.
+ </para>
+      <para>
+ The Node Descriptor contains information about the capabilities of the node.</para>
+      <formalpara role="parameter">
+         <title>No Implement</title>
+         <para>Consumers of this API must not implement this interface</para>
+      </formalpara>
+      <section xreflabel="getFrequencyBand()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.getFrequencyBand--">
+         <title>public abstract ZigBeeFrequencyBand getFrequencyBand()</title>
+         <para role="description">
+Returns the radio frequency band the node is currently operating on.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>returns the information about the radio frequency band the node
+         is currently operating on.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getLogicalType()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.getLogicalType--">
+         <title>public abstract short getLogicalType()</title>
+         <para role="description">
+Returns the logical type of the described node.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>one of: {@link ZigBeeNode#COORDINATOR},
+         {@link ZigBeeNode#ROUTER}, {@link ZigBeeNode#ZED}.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getMacCapabilityFlags()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.getMacCapabilityFlags--">
+         <title>public abstract ZigBeeMacCapabiliyFlags getMacCapabilityFlags()</title>
+         <para role="description">
+Returns the MAC Capability Flags field information.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the MAC Capability Flags field information.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getManufacturerCode()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.getManufacturerCode--">
+         <title>public abstract int getManufacturerCode()</title>
+         <para role="description">
+Returns the manufacturer code of the described node.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the manufacturer code of the described node.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getMaxBufferSize()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.getMaxBufferSize--">
+         <title>public abstract int getMaxBufferSize()</title>
+         <para role="description">
+Returns the maximum buffer size of the described node.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the maximum buffer size of the described node.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getMaxIncomingTransferSize()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.getMaxIncomingTransferSize--">
+         <title>public abstract int getMaxIncomingTransferSize()</title>
+         <para role="description">
+Returns the maximum incoming transfer size of the described node.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the maximum incoming transfer size of the described node.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getMaxOutgoingTransferSize()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.getMaxOutgoingTransferSize--">
+         <title>public abstract int getMaxOutgoingTransferSize()</title>
+         <para role="description">
+Returns the maximum outgoing transfer size of the described node.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the maximum outgoing transfer size of the described node.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getServerMask()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.getServerMask--">
+         <title>public abstract ZigBeeServerMask getServerMask()</title>
+         <para role="description">
+Returns the server mask of the described node.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the server mask of the described node.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isComplexDescriptorAvailable()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.isComplexDescriptorAvailable--">
+         <title>public abstract boolean isComplexDescriptorAvailable()</title>
+         <para role="description">
+Checks if a complex descriptor is available.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if a complex descriptor is available or false otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isExtendedActiveEndpointListAvailable()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.isExtendedActiveEndpointListAvailable--">
+         <title>public abstract boolean isExtendedActiveEndpointListAvailable()</title>
+         <para role="description">
+Checks if extended active endpoint list is available.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if extended active endpoint list is available or false
+         otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isExtendedSimpleDescriptorListAvailable()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.isExtendedSimpleDescriptorListAvailable--">
+         <title>public abstract boolean isExtendedSimpleDescriptorListAvailable()</title>
+         <para role="description">
+Checks if extended simple descriptor is available.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if extended simple descriptor is available or false
+         otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isUserDescriptorAvailable()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor.isUserDescriptorAvailable--">
+         <title>public abstract boolean isUserDescriptorAvailable()</title>
+         <para role="description">
+Checks if a user descriptor is available.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if a user descriptor is available or false otherwise.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZigBeePowerDescriptor"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor">
+      <title>public abstract ZigBeePowerDescriptor</title>
+      <para>
+This interface represents a power descriptor as described in the ZigBee
+ Specification.
+ </para>
+      <para>
+ The Power Descriptor gives a dynamic indication of the power status of the
+ node.</para>
+      <formalpara role="parameter">
+         <title>No Implement</title>
+         <para>Consumers of this API must not implement this interface</para>
+      </formalpara>
+      <section xreflabel="CRITICAL_LEVEL"
+               role="field"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.CRITICAL_LEVEL">
+         <title>public static final short CRITICAL_LEVEL = 0</title>
+         <para>
+Current power source level: critical.
+   </para>
+      </section>
+      <section xreflabel="FULL_LEVEL"
+               role="field"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.FULL_LEVEL">
+         <title>public static final short FULL_LEVEL = 3</title>
+         <para>
+Current power source level: 100%.
+   </para>
+      </section>
+      <section xreflabel="LOW_LEVEL"
+               role="field"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.LOW_LEVEL">
+         <title>public static final short LOW_LEVEL = 1</title>
+         <para>
+Current power source level: 33%.
+   </para>
+      </section>
+      <section xreflabel="MIDDLE_LEVEL"
+               role="field"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.MIDDLE_LEVEL">
+         <title>public static final short MIDDLE_LEVEL = 2</title>
+         <para>
+Current power source level: 66%.
+   </para>
+      </section>
+      <section xreflabel="getCurrentPowerMode()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.getCurrentPowerMode--">
+         <title>public abstract short getCurrentPowerMode()</title>
+         <para role="description">
+Returns the current power mode.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the current power mode.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getCurrentPowerSource()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.getCurrentPowerSource--">
+         <title>public abstract short getCurrentPowerSource()</title>
+         <para role="description">
+Returns the current power source field of the Power Descriptor.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the current power source field of the Power Descriptor.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getCurrentPowerSourceLevel()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.getCurrentPowerSourceLevel--">
+         <title>public abstract short getCurrentPowerSourceLevel()</title>
+         <para role="description">
+Returns the current power source level.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the current power source level. May be one of
+         {@link #CRITICAL_LEVEL}, {@link #LOW_LEVEL},
+         {@link #MIDDLE_LEVEL}, {@link #FULL_LEVEL}.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isConstantMainsPowerAvailable()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.isConstantMainsPowerAvailable--">
+         <title>public abstract boolean isConstantMainsPowerAvailable()</title>
+         <para role="description">
+Checks if constant (mains) power is available.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if constant (mains) power is available or false otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isDisposableBattery()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.isDisposableBattery--">
+         <title>public abstract boolean isDisposableBattery()</title>
+         <para role="description">
+Checks if the currently selected power source is the disposable battery.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if the currently selected power source is the
+         disposable battery.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isDisposableBatteryAvailable()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.isDisposableBatteryAvailable--">
+         <title>public abstract boolean isDisposableBatteryAvailable()</title>
+         <para role="description">
+Checks if a disposable battery is available.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if a disposable battery is available or false otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isMainsPower()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.isMainsPower--">
+         <title>public abstract boolean isMainsPower()</title>
+         <para role="description">
+Checks if the currently selected power source is the mains power.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if the currently selected power source is the mains
+         power.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isOnWhenStimulated()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.isOnWhenStimulated--">
+         <title>public abstract boolean isOnWhenStimulated()</title>
+         <para role="description">
+Checks if the receiver is on when the device is simulated.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if the Current Power Mode field tells that the
+         receiver is on when the device is stimulated by pressing a
+         button, for instance.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isPeriodicallyOn()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.isPeriodicallyOn--">
+         <title>public abstract boolean isPeriodicallyOn()</title>
+         <para role="description">
+Checks if the Current Power Mode field is periodically on.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if the Current Power Mode field is periodically on.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isRechargableBattery()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.isRechargableBattery--">
+         <title>public abstract boolean isRechargableBattery()</title>
+         <para role="description">
+Checks if the currently selected power source is the rechargeable
+ battery.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if the currently selected power source is the
+         rechargeable battery.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isRechargableBatteryAvailable()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.isRechargableBatteryAvailable--">
+         <title>public abstract boolean isRechargableBatteryAvailable()</title>
+         <para role="description">
+Checks if a rechargeable battery is available.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if a rechargeable battery is available or false otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isSyncronizedWithOnIdle()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor.isSyncronizedWithOnIdle--">
+         <title>public abstract boolean isSyncronizedWithOnIdle()</title>
+         <para role="description">
+Checks if synchronized with the receiver on-when-idle subfield of the
+ node descriptor.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if the Current Power Mode field is synchronized on
+         idle.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZigBeeServerMask"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptors.ZigBeeServerMask">
+      <title>public abstract ZigBeeServerMask</title>
+      <para>
+Represents the ZigBee Server Mask field of the ZigBee Node Descriptor.
+   </para>
+      <formalpara role="parameter">
+         <title>No Implement</title>
+         <para>Consumers of this API must not implement this interface</para>
+      </formalpara>
+      <section xreflabel="isBackupBindingTableCache()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeServerMask.isBackupBindingTableCache--">
+         <title>public abstract boolean isBackupBindingTableCache()</title>
+         <para role="description">
+Checks if the server is a Backup Binding Table Cache.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if and only if the server is a Backup Binding Table
+         Cache.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isBackupDiscoveryCache()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeServerMask.isBackupDiscoveryCache--">
+         <title>public abstract boolean isBackupDiscoveryCache()</title>
+         <para role="description">
+Checks if the server is a Backup Discovery Cache.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if and only if the server is a Backup Discovery
+         Cache.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isBackupTrustCenter()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeServerMask.isBackupTrustCenter--">
+         <title>public abstract boolean isBackupTrustCenter()</title>
+         <para role="description">
+Checks if the server is a Backup Trust Center.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if and only if the server is a Backup Trust Center.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isNetworkManager()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeServerMask.isNetworkManager--">
+         <title>public abstract boolean isNetworkManager()</title>
+         <para role="description">
+Checks if the server is a Network Manager.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if and only if the server is a Network Manager.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isPrimaryBindingTableCache()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeServerMask.isPrimaryBindingTableCache--">
+         <title>public abstract boolean isPrimaryBindingTableCache()</title>
+         <para role="description">
+Checks if the server is a Primary Binding Table Cache.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if and only if the server is a Primary Binding Table
+         Cache.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isPrimaryDiscoveryCache()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeServerMask.isPrimaryDiscoveryCache--">
+         <title>public abstract boolean isPrimaryDiscoveryCache()</title>
+         <para role="description">
+Checks if the server is a Primary Discovery Cache.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if and only if the server is a Primary Discovery
+         Cache.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isPrimaryTrustCenter()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeServerMask.isPrimaryTrustCenter--">
+         <title>public abstract boolean isPrimaryTrustCenter()</title>
+         <para role="description">
+Checks if the server is a Primary Trust Center.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if and only if the server is a Primary Trust Center.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZigBeeSimpleDescriptor"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor">
+      <title>public abstract ZigBeeSimpleDescriptor</title>
+      <para>
+This interface represents a simple descriptor as described in the ZigBee
+ Specification.
+ </para>
+      <para>
+ The Simple Descriptor contains information specific to each endpoint present
+ in the node.</para>
+      <section xreflabel="getApplicationDeviceId()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor.getApplicationDeviceId--">
+         <title>public abstract int getApplicationDeviceId()</title>
+         <para role="description">
+Returns the application device id as defined per profile.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the application device id as defined per profile.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getApplicationDeviceVersion()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor.getApplicationDeviceVersion--">
+         <title>public abstract byte getApplicationDeviceVersion()</title>
+         <para role="description">
+Returns the version of the endpoint application.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the version of the endpoint application.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getApplicationProfileId()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor.getApplicationProfileId--">
+         <title>public abstract int getApplicationProfileId()</title>
+         <para role="description">
+Returns the application profile id.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the application profile id.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getEndpoint()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor.getEndpoint--">
+         <title>public abstract short getEndpoint()</title>
+         <para role="description">
+Returns the endpoint for which this descriptor is defined.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the endpoint for which this descriptor is defined.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getInputClusters()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor.getInputClusters--">
+         <title>public abstract int[][] getInputClusters()</title>
+         <para role="description">
+Returns an array of input (server) cluster identifiers.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>an array of input (server) cluster identifiers, returns an empty
+         array if does not provides any input (server) clusters.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getOutputClusters()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor.getOutputClusters--">
+         <title>public abstract int[][] getOutputClusters()</title>
+         <para role="description">
+Returns an array of output (client) cluster identifiers.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>an array of output (client) cluster identifiers, returns an empty
+         array if does not provides any output (client) clusters.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="providesInputCluster(int)"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor.providesInputCluster-int-">
+         <title>public abstract boolean providesInputCluster(int clusterId)</title>
+         <formalpara role="parameter">
+            <title>clusterId</title>
+            <para>the cluster identifier.</para>
+         </formalpara>
+         <para role="description">
+Checks if this endpoint implements the given cluster id as an input
+ cluster.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if and only if this endpoint implements the given cluster id
+         as an input cluster.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="providesOutputCluster(int)"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor.providesOutputCluster-int-">
+         <title>public abstract boolean providesOutputCluster(int clusterId)</title>
+         <formalpara role="parameter">
+            <title>clusterId</title>
+            <para>the cluster identifier.</para>
+         </formalpara>
+         <para role="description">
+Checks if this endpoint implements the given cluster id as an output
+ cluster.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if and only if this endpoint implements the given cluster id
+         as an output cluster.</para>
+         </formalpara>
+      </section>
+   </section>
+</section>

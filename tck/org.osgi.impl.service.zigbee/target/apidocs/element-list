@@ -1,0 +1,8 @@
+org.osgi.impl.service.zigbee
+org.osgi.impl.service.zigbee.basedriver
+org.osgi.impl.service.zigbee.basedriver.configuration
+org.osgi.impl.service.zigbee.basedriver.descriptors
+org.osgi.impl.service.zigbee.descriptions
+org.osgi.impl.service.zigbee.event
+org.osgi.impl.service.zigbee.util
+org.osgi.impl.service.zigbee.util.teststep

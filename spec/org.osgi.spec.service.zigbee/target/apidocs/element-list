@@ -1,0 +1,4 @@
+org.osgi.service.zigbee
+org.osgi.service.zigbee.descriptions
+org.osgi.service.zigbee.descriptors
+org.osgi.service.zigbee.types
