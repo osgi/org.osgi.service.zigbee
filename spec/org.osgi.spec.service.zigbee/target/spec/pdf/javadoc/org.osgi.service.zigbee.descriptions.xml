@@ -1,0 +1,835 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xreflabel="org.osgi.service.zigbee.descriptions"
+         version="5"
+         role="package"
+         xml:id="org.osgi.service.zigbee.descriptions">
+   <title>org.osgi.service.zigbee.descriptions</title>
+   <info>
+      <releaseinfo xml:id="org.osgi.service.zigbee.descriptions-version">Version 1.0</releaseinfo>
+      <edition xml:id="org.osgi.service.zigbee.descriptions-version.number">1.0</edition>
+   </info>
+   <para>
+Device Service Specification for ZigBee Technology Descriptions.
+ 
+ </para>
+   <para>
+ This package contains the interfaces for descriptions. The latter may be used
+ to embed meta information about the ZigBee devices, and in other words a meta
+ description of each device type present in a ZCL profile, or even custom
+ devices.
+ 
+ </para>
+   <para>
+ It is not mandatory to provide this meta model for being able to interact
+ with a specific device, but the presence of this meta model would make much
+ easier to implement, for example user interfaces.
+ 
+ </para>
+   <para>
+ Bundles wishing to use this package must list the package in the
+ Import-Package header of the bundle's manifest. This package has two types of
+ users: the consumers that use the API in this package and the providers that
+ implement the API in this package.
+ 
+ </para>
+   <para>
+ Example import for consumers using the API in this package:
+ </para>
+   <para>
+ {@code  Import-Package: org.osgi.service.zigbee.descriptions; version="[1.0,2.0)"}
+ </para>
+   <para>
+ Example import for providers implementing the API in this package:
+ </para>
+   <para>
+ {@code  Import-Package: org.osgi.service.zigbee.descriptions; version="[1.0,1.1)"}</para>
+   <section role="summary">
+      <title>Summary</title>
+      <itemizedlist>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptions.ZCLAttributeDescription">
+                  <code>ZCLAttributeDescription</code>
+               </link> - 
+This interface represents a ZCLAttributeDescription.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptions.ZCLClusterDescription">
+                  <code>ZCLClusterDescription</code>
+               </link> - 
+This interface represents a ZCL Cluster description.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptions.ZCLCommandDescription">
+                  <code>ZCLCommandDescription</code>
+               </link> - 
+This interface represents a ZCLCommandDescription.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription">
+                  <code>ZCLDataTypeDescription</code>
+               </link> - 
+This interface is used for representing any of the ZigBee Data Types defined
+ in the ZCL.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription">
+                  <code>ZCLGlobalClusterDescription</code>
+               </link> - 
+This interface represents Cluster global description.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptions.ZCLParameterDescription">
+                  <code>ZCLParameterDescription</code>
+               </link> - 
+This interface represents a ZigBee parameter description.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription">
+                  <code>ZCLSimpleTypeDescription</code>
+               </link> - 
+This interface is used for representing any of the simple ZigBee Data Types
+ defined in the ZCL.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription">
+                  <code>ZigBeeDeviceDescription</code>
+               </link> - 
+This interface represents a ZigBee device description.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet">
+                  <code>ZigBeeDeviceDescriptionSet</code>
+               </link> - 
+This interface represents a ZigBee Device description Set.
+   </para>
+         </listitem>
+      </itemizedlist>
+   </section>
+   <section xreflabel="ZCLAttributeDescription"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptions.ZCLAttributeDescription">
+      <title>public abstract ZCLAttributeDescription<?line-break?> extends ZCLAttributeInfo</title>
+      <para>
+This interface represents a ZCLAttributeDescription.
+   </para>
+      <section xreflabel="getDefaultValue()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLAttributeDescription.getDefaultValue--">
+         <title>public abstract Object getDefaultValue()</title>
+         <para role="description">
+Returns the attribute default value.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the attribute default value.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getName()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLAttributeDescription.getName--">
+         <title>public abstract String getName()</title>
+         <para role="description">
+Returns the attribute name.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the attribute name.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getShortDescription()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLAttributeDescription.getShortDescription--">
+         <title>public abstract String getShortDescription()</title>
+         <para role="description">
+Returns the attribute functional description.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the attribute functional description.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isMandatory()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLAttributeDescription.isMandatory--">
+         <title>public abstract boolean isMandatory()</title>
+         <para role="description">
+Checks if this attribute is mandatory.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true, if and only if the attribute is mandatory.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isPartOfAScene()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLAttributeDescription.isPartOfAScene--">
+         <title>public abstract boolean isPartOfAScene()</title>
+         <para role="description">
+Checks if this attribute is part of a scene.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if the attribute is part of a scene (cluster), false
+         otherwise.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isReadOnly()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLAttributeDescription.isReadOnly--">
+         <title>public abstract boolean isReadOnly()</title>
+         <para role="description">
+Checks if this attribute is read-only.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if the attribute is read only, false otherwise (that is, if
+         the attribute is read/write or optionally writable (R*W)).</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isReportable()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLAttributeDescription.isReportable--">
+         <title>public abstract boolean isReportable()</title>
+         <para role="description">
+Checks if this attribute is reportable.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true if and only if the attribute support subscription.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZCLClusterDescription"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptions.ZCLClusterDescription">
+      <title>public abstract ZCLClusterDescription</title>
+      <para>
+This interface represents a ZCL Cluster description.
+   </para>
+      <section xreflabel="getAttributeDescriptions()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLClusterDescription.getAttributeDescriptions--">
+         <title>public abstract ZCLAttributeDescription[][] getAttributeDescriptions()</title>
+         <para role="description">
+Returns an array of the attribute descriptions.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>an array of the attribute descriptions.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getGeneratedCommandDescriptions()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLClusterDescription.getGeneratedCommandDescriptions--">
+         <title>public abstract ZCLCommandDescription[][] getGeneratedCommandDescriptions()</title>
+         <para role="description">
+Returns an array of the generated command descriptions.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>an array of the generated command descriptions.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getGlobalClusterDescription()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLClusterDescription.getGlobalClusterDescription--">
+         <title>public abstract ZCLGlobalClusterDescription getGlobalClusterDescription()</title>
+         <para role="description">
+Returns an array of the command descriptions.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>an array of the command descriptions.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getId()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLClusterDescription.getId--">
+         <title>public abstract int getId()</title>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the cluster identifier.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getReceivedCommandDescriptions()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLClusterDescription.getReceivedCommandDescriptions--">
+         <title>public abstract ZCLCommandDescription[][] getReceivedCommandDescriptions()</title>
+         <para role="description">
+Returns an array of the received command description.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>an array of the received command description.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZCLCommandDescription"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptions.ZCLCommandDescription">
+      <title>public abstract ZCLCommandDescription</title>
+      <para>
+This interface represents a ZCLCommandDescription.
+   </para>
+      <section xreflabel="getId()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLCommandDescription.getId--">
+         <title>public abstract short getId()</title>
+         <para role="description">
+Returns the command identifier.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the command identifier.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getManufacturerCode()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLCommandDescription.getManufacturerCode--">
+         <title>public abstract int getManufacturerCode()</title>
+         <para role="description">
+Returns the manufacturer code.
+ 
+ Default value is: -1 (no code).
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the manufacturer code.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getName()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLCommandDescription.getName--">
+         <title>public abstract String getName()</title>
+         <para role="description">
+Returns the command name.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the command name.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getParameterDescriptions()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLCommandDescription.getParameterDescriptions--">
+         <title>public abstract ZCLParameterDescription[][] getParameterDescriptions()</title>
+         <para role="description">
+Returns an array of the parameter descriptions.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>an array of the parameter descriptions.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getShortDescription()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLCommandDescription.getShortDescription--">
+         <title>public abstract String getShortDescription()</title>
+         <para role="description">
+Returns the command functional description.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the command functional description.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isClientServerDirection()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLCommandDescription.isClientServerDirection--">
+         <title>public abstract boolean isClientServerDirection()</title>
+         <para role="description">
+Checks if this is a server-side command (that is going from the client to
+ server direction).
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the isClientServerDirection value.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isClusterSpecificCommand()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLCommandDescription.isClusterSpecificCommand--">
+         <title>public abstract boolean isClusterSpecificCommand()</title>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the isClusterSpecificCommand value.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isMandatory()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLCommandDescription.isMandatory--">
+         <title>public abstract boolean isMandatory()</title>
+         <para role="description">
+Checks if this command it mandatory.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true, if and only if the command is mandatory.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isManufacturerSpecific()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLCommandDescription.isManufacturerSpecific--">
+         <title>public abstract boolean isManufacturerSpecific()</title>
+         <para role="description">
+Checks if the command is manufacturer specific.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>{@code true} if end only if {@link #getManufacturerCode()} is
+         not. -1.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZCLDataTypeDescription"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription">
+      <title>public abstract ZCLDataTypeDescription</title>
+      <para>
+This interface is used for representing any of the ZigBee Data Types defined
+ in the ZCL. Each of these data types has a set of associated information that
+ this interface definition permits to retrieve using the specific methods.
+ </para>
+      <itemizedlist>
+         <listitem>
+            <para>The data type identifier</para>
+         </listitem>
+         <listitem>
+            <para>The data type name</para>
+         </listitem>
+         <listitem>
+            <para>The data type is analog or digital</para>
+         </listitem>
+         <listitem>
+            <para>The Java class used to represent the data type.</para>
+         </listitem>
+      </itemizedlist>
+      <formalpara role="parameter">
+         <title>No Implement</title>
+         <para>Consumers of this API must not implement this interface</para>
+      </formalpara>
+      <section xreflabel="getId()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription.getId--">
+         <title>public abstract short getId()</title>
+         <para role="description">
+Returns the data type identifier.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the data type identifier. The data types identifiers supported by
+         this specification are defined in the {@link ZigBeeDataTypes}
+         interface.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getJavaDataType()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription.getJavaDataType--">
+         <title>public abstract Class&lt;?&gt; getJavaDataType()</title>
+         <para role="description">
+Returns the corresponding Java type class.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the corresponding Java type class.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getName()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription.getName--">
+         <title>public abstract String getName()</title>
+         <para role="description">
+Returns the associated data type name.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the associated data type name string.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="isAnalog()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription.isAnalog--">
+         <title>public abstract boolean isAnalog()</title>
+         <para role="description">
+Checks if the data type is analog.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>true, if the data type is Analog, otherwise is Discrete.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZCLGlobalClusterDescription"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription">
+      <title>public abstract ZCLGlobalClusterDescription</title>
+      <para>
+This interface represents Cluster global description.
+   </para>
+      <section xreflabel="getClientClusterDescription()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription.getClientClusterDescription--">
+         <title>public abstract ZCLClusterDescription getClientClusterDescription()</title>
+         <para role="description">
+Returns the client cluster description.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the client cluster description.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getClusterDescription()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription.getClusterDescription--">
+         <title>public abstract String getClusterDescription()</title>
+         <para role="description">
+Returns the cluster functional description.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the cluster functional description.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getClusterFunctionalDomain()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription.getClusterFunctionalDomain--">
+         <title>public abstract String getClusterFunctionalDomain()</title>
+         <para role="description">
+Returns the cluster functional domain.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the cluster functional domain.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getClusterId()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription.getClusterId--">
+         <title>public abstract int getClusterId()</title>
+         <para role="description">
+Returns the cluster identifier.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the cluster identifier.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getClusterName()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription.getClusterName--">
+         <title>public abstract String getClusterName()</title>
+         <para role="description">
+Returns the cluster name.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the cluster name.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getServerClusterDescription()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription.getServerClusterDescription--">
+         <title>public abstract ZCLClusterDescription getServerClusterDescription()</title>
+         <para role="description">
+Returns the server cluster description.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the server cluster description.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZCLParameterDescription"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptions.ZCLParameterDescription">
+      <title>public abstract ZCLParameterDescription</title>
+      <para>
+This interface represents a ZigBee parameter description.
+   </para>
+      <section xreflabel="getDataTypeDescription()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLParameterDescription.getDataTypeDescription--">
+         <title>public abstract ZCLDataTypeDescription getDataTypeDescription()</title>
+         <para role="description">
+Returns the parameter data type.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the parameter data type.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZCLSimpleTypeDescription"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription">
+      <title>public abstract ZCLSimpleTypeDescription<?line-break?> extends ZCLDataTypeDescription</title>
+      <para>
+This interface is used for representing any of the simple ZigBee Data Types
+ defined in the ZCL.
+ 
+ </para>
+      <para>
+ The interface extends the {@link ZCLDataTypeDescription} by providing
+ serialize and deserialize methods to marshal and unmarshal the data into the
+ {@link ZigBeeDataInput} and from {@link ZigBeeDataOutput} streams.
+ 
+ </para>
+      <para>
+ Related documentation: [1] ZigBee Cluster Library specification, Document
+ 075123r04ZB, May 29, 2012.</para>
+      <formalpara role="parameter">
+         <title>No Implement</title>
+         <para>Consumers of this API must not implement this interface</para>
+      </formalpara>
+      <section xreflabel="deserialize(ZigBeeDataInput)"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription.deserialize-ZigBeeDataInput-">
+         <title>public abstract Object deserialize(ZigBeeDataInput is) throws IOException</title>
+         <formalpara role="parameter">
+            <title>is</title>
+            <para>the {@link ZigBeeDataInput} from where the value of data type
+        is read from.</para>
+         </formalpara>
+         <para role="description">
+Deserializes a value from the passed {@link ZigBeeDataInput} stream.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>An object that represents the deserialized value of data. Returns
+         {@code  null} if the read value represents the <emphasis>Invalid
+         Value</emphasis> for the specific ZigBee data type.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>NullPointerException</code>– If {@link ZigBeeDataInput} parameter is
+         {@code null}.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>IOException</code>– If an I/O error occurs while reading the
+         {@link ZigBeeDataInput}. An {@link EOFException} is thrown if the
+         data input stream end is reached while deserializing the data
+         type.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="serialize(ZigBeeDataOutput,Object)"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZCLSimpleTypeDescription.serialize-ZigBeeDataOutput-Object-">
+         <title>public abstract void serialize(ZigBeeDataOutput os, Object value) throws IOException</title>
+         <formalpara role="parameter">
+            <title>os</title>
+            <para>a {@link ZigBeeDataOutput} stream where to the passed value
+        will be appended. This parameter cannot be {@code null}. If
+        {@code null} a {@link NullPointerException} must be thrown.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>value</title>
+            <para>The value that have to be serialized on the output stream.
+        If null is passed this method outputs on the stream the ZigBee
+        invalid value related the specific data type. If the data type do
+        not allow any invalid value and the passed value is null an
+        {@link IllegalArgumentException} is thrown.</para>
+         </formalpara>
+         <para role="description">
+Serializes a ZigBee data type into a {@link ZigBeeDataOutput} stream. An
+ implementation of this method must throw an
+ {@link IllegalArgumentException} if the passed value does not belong to
+ the expected class or its value exceeds the possible values allowed (in
+ terms of range or length).
+ 
+ </para>
+         <para>
+ An implementation of this method must interpret (where it makes sense) a
+ {@code null} value as the request to serialize the so called <emphasis>Invalid
+ Value</emphasis>.</para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>IOException</code>– If an I/O error occurs while writing on the
+         {@link ZigBeeDataOutput}. The {@link EOFException} may be thrown
+         if there is no more space on the data output for serializing the
+         passed value.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>NullPointerException</code>– If {@link ZigBeeDataOutput} parameter is
+         {@code null}.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>IllegalArgumentException</code>– If the passed value parameter does not
+         belong to the expected class or its value exceeds the possible
+         values allowed (range or length).</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZigBeeDeviceDescription"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription">
+      <title>public abstract ZigBeeDeviceDescription</title>
+      <para>
+This interface represents a ZigBee device description.
+   </para>
+      <section xreflabel="getClientClustersDescriptions()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription.getClientClustersDescriptions--">
+         <title>public abstract ZCLClusterDescription[][] getClientClustersDescriptions()</title>
+         <para role="description">
+Returns an array of client cluster descriptions.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>an array of client cluster descriptions.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getId()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription.getId--">
+         <title>public abstract int getId()</title>
+         <para role="description">
+Returns the device identifier.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the device identifier.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getName()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription.getName--">
+         <title>public abstract String getName()</title>
+         <para role="description">
+Returns the device name.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the device name.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getProfileId()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription.getProfileId--">
+         <title>public abstract int getProfileId()</title>
+         <para role="description">
+Returns the profile identifier.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the profile identifier.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getServerClustersDescriptions()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription.getServerClustersDescriptions--">
+         <title>public abstract ZCLClusterDescription[][] getServerClustersDescriptions()</title>
+         <para role="description">
+Returns an array of server cluster descriptions.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>an array of server cluster descriptions.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getVersion()"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription.getVersion--">
+         <title>public abstract Integer getVersion()</title>
+         <para role="description">
+Returns the device version.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>the device version.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="ZigBeeDeviceDescriptionSet"
+            role="class"
+            xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet">
+      <title>public abstract ZigBeeDeviceDescriptionSet</title>
+      <para>
+This interface represents a ZigBee Device description Set. A Set is
+ registered as an OSGi Service that provides method to retrieve endpoint
+ descriptions.
+ 
+ In addition to the ZigBeeDeviceDescriptionSet's (OSGi service) properties;
+ ZigBeeDeviceDescriptionSet is also expected to be registered as an OSGi
+ service with the following {@link ZigBeeEndpoint#PROFILE_ID}, and
+ {@link ZigBeeNode#MANUFACTURER_CODE} properties.
+   </para>
+      <section xreflabel="DEVICES"
+               role="field"
+               xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet.DEVICES">
+         <title>public static final String DEVICES = "zigbee.profile.devices"</title>
+         <para>
+Property key for a comma separated list of devices identifiers supported
+ by the set.
+ 
+ This property is <emphasis role="strong">mandatory</emphasis>.
+   </para>
+      </section>
+      <section xreflabel="PROFILE_NAME"
+               role="field"
+               xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet.PROFILE_NAME">
+         <title>public static final String PROFILE_NAME = "zigbee.profile.name"</title>
+         <para>
+Property key for a profile name.
+ 
+ This property is <emphasis role="strong">mandatory</emphasis>.
+   </para>
+      </section>
+      <section xreflabel="VERSION"
+               role="field"
+               xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet.VERSION">
+         <title>public static final String VERSION = "zigbee.profile.version"</title>
+         <para>
+Property key for a version of the application profile. The format is
+ 'major.minor' with major and minor being integers.
+ 
+ This property is <emphasis role="strong">mandatory</emphasis>.
+   </para>
+      </section>
+      <section xreflabel="getDeviceSpecification(int,short)"
+               role="method"
+               xml:id="org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescriptionSet.getDeviceSpecification-int-short-">
+         <title>public abstract ZigBeeDeviceDescription getDeviceSpecification(int deviceId, short version)</title>
+         <formalpara role="parameter">
+            <title>deviceId</title>
+            <para>Identifier of the device.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>version</title>
+            <para>The version of the application profile.</para>
+         </formalpara>
+         <para role="description">
+Returns the description of a device identified by its identifier and its
+ version.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>The associated device description.</para>
+         </formalpara>
+      </section>
+   </section>
+</section>

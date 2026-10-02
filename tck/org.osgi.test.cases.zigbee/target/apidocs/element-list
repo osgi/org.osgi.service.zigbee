@@ -1,0 +1,6 @@
+org.osgi.test.cases.zigbee
+org.osgi.test.cases.zigbee.config.file
+org.osgi.test.cases.zigbee.configuration
+org.osgi.test.cases.zigbee.descriptions
+org.osgi.test.cases.zigbee.descriptors
+org.osgi.test.cases.zigbee.mock

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.osgi.service.zigbee"},{"l":"org.osgi.service.zigbee.descriptions"},{"l":"org.osgi.service.zigbee.descriptors"},{"l":"org.osgi.service.zigbee.types"}];updateSearchResults();
