@@ -24,7 +24,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 import org.osgi.test.cases.zigbee.mock.ZCLFrameImpl;
-import org.osgi.test.support.step.TestStepProxy;
+import org.osgi.tck.step.TestStepProxy;
 
 public class TestStepLauncher {
 

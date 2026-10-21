@@ -18,9 +18,13 @@
 
 package org.osgi.test.cases.zigbee;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
 import java.io.IOException;
 import java.math.BigInteger;
 
+import org.junit.jupiter.api.Test;
 import org.osgi.service.zigbee.ZigBeeDataInput;
 import org.osgi.service.zigbee.ZigBeeDataOutput;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
@@ -76,7 +80,6 @@ import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger56;
 import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger64;
 import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger8;
 import org.osgi.test.cases.zigbee.mock.ZigBeeSerializer;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Partial test of the ZCL data types classes. The tests verify for each
@@ -105,7 +108,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @author $Id$
  *
  */
-public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
+public class ZCLDataTypesTestCase {
 
 	byte[]		nullDate			= new byte[] {0x00, 0x00, 0x00, 0x00};
 	Object[]	dataTypesZeroValue	= new Object[] {
@@ -114,6 +117,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 			Long.valueOf(0), BigInteger.valueOf(0), new String(), nullDate
 	};
 
+	@Test
 	public void testGeneralDataTypes() {
 
 		// true if it is analog
@@ -140,6 +144,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 
 	}
 
+	@Test
 	public void testBitmapDataTypes() {
 
 		// true if it is analog
@@ -165,6 +170,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		this.basicDataTypeChecks(ZigBeeBitmap64.getInstance(), ZigBeeDataTypes.BITMAP_64, 8, Long.class, U, I, A);
 	}
 
+	@Test
 	public void testUnsignedIntegerDataTypes() {
 
 		// true if it is analog
@@ -191,6 +197,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 
 	}
 
+	@Test
 	public void testSignedIntegerDataTypes() {
 
 		// true if it is analog
@@ -216,6 +223,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		this.basicDataTypeChecks(ZigBeeSignedInteger64.getInstance(), ZigBeeDataTypes.SIGNED_INTEGER_64, 8, Long.class, U, I, A);
 	}
 
+	@Test
 	public void testEnumDataTypes() {
 
 		// true if it is analog
@@ -235,6 +243,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		this.basicDataTypeChecks(ZigBeeEnumeration16.getInstance(), ZigBeeDataTypes.ENUMERATION_16, 2, Integer.class, U, I, A);
 	}
 
+	@Test
 	public void testTimeDataTypes() {
 
 		// true if it is analog
@@ -255,6 +264,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		this.basicDataTypeChecks(ZigBeeUTCTime.getInstance(), ZigBeeDataTypes.UTC_TIME, 4, Long.class, U, I, A);
 	}
 
+	@Test
 	public void testIdentifierDataTypes() {
 
 		// true if it is analog
@@ -275,6 +285,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		this.basicDataTypeChecks(ZigBeeBACnet.getInstance(), ZigBeeDataTypes.BACNET_OID, 4, Long.class, U, I, A);
 	}
 
+	@Test
 	public void testBooleanDataType() {
 
 		// true if it is analog
@@ -293,6 +304,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		this.basicDataTypeChecks(ZigBeeBoolean.getInstance(), ZigBeeDataTypes.BOOLEAN, 1, Boolean.class, U, I, A);
 	}
 
+	@Test
 	public void testFloatDataTypes() {
 
 		// true if it is analog
@@ -313,6 +325,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		this.basicDataTypeChecks(ZigBeeFloatingDouble.getInstance(), ZigBeeDataTypes.FLOATING_DOUBLE, 8, Double.class, U, I, A);
 	}
 
+	@Test
 	public void testStringDataTypes() {
 
 		// true if it is analog
@@ -334,6 +347,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		this.basicDataTypeChecks(ZigBeeLongOctetString.getInstance(), ZigBeeDataTypes.LONG_OCTET_STRING, 2, byte[].class, U, I, A);
 	}
 
+	@Test
 	public void testMiscellaneousDataTypes() {
 
 		// true if it is analog
@@ -377,22 +391,22 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		String packageName = dataType.getClass().getPackage().getName();
 		String expectedName = dataType.getClass().getName().substring(packageName.length() + ".ZigBee".length());
 
-		assertEquals("data type name is not correct", expectedName, dataType.getName());
+		assertThat(dataType.getName()).as("data type name is not correct").isEqualTo(expectedName);
 
 		/*
 		 * Checks if the id assigned to the data type is the expected one
 		 */
-		assertEquals("data type ID is not correct", dataTypeId, dataType.getId());
+		assertThat(dataType.getId()).as("data type ID is not correct").isEqualTo(dataTypeId);
 
 		/*
 		 * Checks if the java type used to map the data type is correct.
 		 */
-		assertEquals("java class is not correct ", clazz.getName(), dataType.getJavaDataType().getName());
+		assertThat(dataType.getJavaDataType().getName()).as("java class is not correct ").isEqualTo(clazz.getName());
 
 		/*
 		 * Checks the correctness of the analog/digital information
 		 */
-		assertEquals("isAnalog() method returned the wrong value for data type " + dataType.getClass().getName(), A, dataType.isAnalog());
+		assertThat(dataType.isAnalog()).as("isAnalog() method returned the wrong value for data type " + dataType.getClass().getName()).isEqualTo(A);
 
 		if (!I) {
 			try {
@@ -420,7 +434,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 
 			try {
 				Object value = dataType.deserialize(dataInput);
-				assertNull("deserialize() must return 'null' as indication of invalid value in data type: " + dataType.getName(), value);
+				assertThat(value).as("deserialize() must return 'null' as indication of invalid value in data type: " + dataType.getName()).isNull();
 			} catch (IOException e) {
 				fail("unexpected exception: " + e.getMessage());
 			}
@@ -992,7 +1006,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		}
 
 		int newOffset = payload.getCurrentOutputIndex();
-		assertEquals("wrong number of byte where actually serialized on the ZigBeeOutputStream", size, newOffset - offset);
+		assertThat(newOffset - offset).as("wrong number of byte where actually serialized on the ZigBeeOutputStream").isEqualTo(size);
 
 		// checks if the actual data corresponds to the expected one.
 
@@ -1010,11 +1024,11 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		if (d == null) {
 			fail("unexpected null value returned deserializing data type " + dataType.getName());
 		}
-		assertEquals("wrong class returned by the deserialize() method", clazz.getName(), d.getClass().getName());
+		assertThat(d.getClass().getName()).as("wrong class returned by the deserialize() method").isEqualTo(clazz.getName());
 
 		Number n = (Number) d;
 
-		assertEquals("wrong value got deserializing type " + dataType.getName(), value, n);
+		assertThat(n).as("wrong value got deserializing type " + dataType.getName()).isEqualTo(value);
 
 	}
 
@@ -1036,7 +1050,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 		}
 
 		int newOffset = payload.getCurrentOutputIndex();
-		assertEquals("wrong number of byte where actually serialized on the ZigBeeOutputStream", size, newOffset - offset);
+		assertThat(newOffset - offset).as("wrong number of byte where actually serialized on the ZigBeeOutputStream").isEqualTo(size);
 
 		// checks if the actual data corresponds to the expected one.
 
@@ -1055,10 +1069,10 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 			fail("unexpected null value returned deserializing data type " + dataType.getName());
 		}
 
-		assertEquals("wrong class returned by the deserialize() method", clazz.getName(), d.getClass().getName());
+		assertThat(d.getClass().getName()).as("wrong class returned by the deserialize() method").isEqualTo(clazz.getName());
 
 		if (d.getClass().equals(String.class)) {
-			assertEquals("wrong value got deserializing type " + dataType.getName(), value, d);
+			assertThat(d).as("wrong value got deserializing type " + dataType.getName()).isEqualTo(value);
 		} else if (d.getClass().equals(byte[].class)) {
 			/*
 			 * we use the value length here because for octet strings the size
@@ -1069,7 +1083,7 @@ public class ZCLDataTypesTestCase extends DefaultTestBundleControl {
 				fail("wrong value got deserializing type " + dataType.getName());
 			}
 		} else if (d.getClass().equals(Boolean.class)) {
-			assertEquals("wrong value got deserializing type " + dataType.getName(), value, d);
+			assertThat(d).as("wrong value got deserializing type " + dataType.getName()).isEqualTo(value);
 		}
 
 	}

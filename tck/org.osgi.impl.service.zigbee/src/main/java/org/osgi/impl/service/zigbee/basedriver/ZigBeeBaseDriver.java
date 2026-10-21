@@ -25,7 +25,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.zigbee.basedriver.configuration.ConfigurationFileReader;
 import org.osgi.impl.service.zigbee.util.Logger;
 import org.osgi.impl.service.zigbee.util.teststep.TestStepForZigBeeImpl;
-import org.osgi.test.support.step.TestStep;
+import org.osgi.tck.step.TestStep;
 
 /**
  * Mocked impl of ZigBeeDeviceNodeListener.

@@ -18,11 +18,13 @@
 
 package org.osgi.test.cases.zigbee;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
 import org.osgi.service.zigbee.APSException;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZigBeeException;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Tests the following exceptions classes;
@@ -34,139 +36,143 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * <li>{@link APSException}
  * </ul>
  */
-public final class ExceptionsTestCases extends DefaultTestBundleControl {
+public final class ExceptionsTestCases {
 
 	private static final String message = "This is an error description.";
 
 	/**
 	 * Tests the {@link ZigBeeException} class.
 	 */
+	@Test
 	public void testZigBeeException() {
 
 		String prefix = "ZigBeeException: check on 1 parameter constructor: ";
 
 		ZigBeeException exception = new ZigBeeException(message);
 
-		assertEquals(prefix + "ZigBeeException.getErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getErrorCode());
-		assertEquals(prefix + "ZigBeeException.getZigBeeErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "ZigBeeException.getMessage()", message, exception.getMessage());
-		assertEquals(prefix + "ZigBeeException.hasZigBeeErrorCode()", false, exception.hasZigBeeErrorCode());
+		assertThat(exception.getErrorCode()).as(prefix + "ZigBeeException.getErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "ZigBeeException.getZigBeeErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.getMessage()).as(prefix + "ZigBeeException.getMessage()").isEqualTo(message);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "ZigBeeException.hasZigBeeErrorCode()").isFalse();
 
 		prefix = "ZigBeeException: check on 2 parameters constructor: ";
 
 		exception = new ZigBeeException(50, message);
 
-		assertEquals(prefix + "ZigBeeException.getErrorCode()", 50, exception.getErrorCode());
-		assertEquals(prefix + "ZigBeeException.getZigBeeErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "ZigBeeException.getMessage()", message, exception.getMessage());
-		assertEquals(prefix + "ZigBeeException.hasZigBeeErrorCode()", false, exception.hasZigBeeErrorCode());
+		assertThat(exception.getErrorCode()).as(prefix + "ZigBeeException.getErrorCode()").isEqualTo(50);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "ZigBeeException.getZigBeeErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.getMessage()).as(prefix + "ZigBeeException.getMessage()").isEqualTo(message);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "ZigBeeException.hasZigBeeErrorCode()").isFalse();
 
 		prefix = "ZigBeeException: check on the 3 parameters constructor: ";
 
 		exception = new ZigBeeException(51, 60, message);
 
-		assertEquals(prefix + "ZigBeeException.getErrorCode()", 51, exception.getErrorCode());
-		assertEquals(prefix + "ZigBeeException.getZigBeeErrorCode()", 60, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "ZigBeeException.getMessage()", message, exception.getMessage());
-		assertEquals(prefix + "ZigBeeException.hasZigBeeErrorCode()", true, exception.hasZigBeeErrorCode());
+		assertThat(exception.getErrorCode()).as(prefix + "ZigBeeException.getErrorCode()").isEqualTo(51);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "ZigBeeException.getZigBeeErrorCode()").isEqualTo(60);
+		assertThat(exception.getMessage()).as(prefix + "ZigBeeException.getMessage()").isEqualTo(message);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "ZigBeeException.hasZigBeeErrorCode()").isTrue();
 	}
 
 	/**
 	 * Tests the {@link ZCLException} class.
 	 */
+	@Test
 	public void testZCLException() {
 
 		String prefix = "ZCLException: check on 1 parameter constructor: ";
 
 		ZCLException exception = new ZCLException(message);
 
-		assertEquals(prefix + "ZCLException.getErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getErrorCode());
-		assertEquals(prefix + "ZCLException.getZigBeeErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "ZCLException.hasZigBeeErrorCode()", false, exception.hasZigBeeErrorCode());
-		assertEquals(prefix + "ZCLException.getMessage()", message, exception.getMessage());
+		assertThat(exception.getErrorCode()).as(prefix + "ZCLException.getErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "ZCLException.getZigBeeErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "ZCLException.hasZigBeeErrorCode()").isFalse();
+		assertThat(exception.getMessage()).as(prefix + "ZCLException.getMessage()").isEqualTo(message);
 
 		prefix = "ZigBeeException: check on 2 parameters constructor: ";
 
 		exception = new ZCLException(50, message);
 
-		assertEquals(prefix + "ZCLException.getErrorCode()", 50, exception.getErrorCode());
-		assertEquals(prefix + "ZCLException.getZigBeeErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "ZCLException.hasZigBeeErrorCode()", false, exception.hasZigBeeErrorCode());
-		assertEquals(prefix + "ZCLException.getMessage()", message, exception.getMessage());
+		assertThat(exception.getErrorCode()).as(prefix + "ZCLException.getErrorCode()").isEqualTo(50);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "ZCLException.getZigBeeErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "ZCLException.hasZigBeeErrorCode()").isFalse();
+		assertThat(exception.getMessage()).as(prefix + "ZCLException.getMessage()").isEqualTo(message);
 
 		prefix = "ZigBeeException: check on the 3 parameters constructor: ";
 
 		exception = new ZCLException(51, 60, message);
 
-		assertEquals(prefix + "ZCLException.getErrorCode()", 51, exception.getErrorCode());
-		assertEquals(prefix + "ZCLException.getZigBeeErrorCode()", 60, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "ZCLException.hasZigBeeErrorCode()", true, exception.hasZigBeeErrorCode());
-		assertEquals(prefix + "ZCLException.getMessage()", message, exception.getMessage());
+		assertThat(exception.getErrorCode()).as(prefix + "ZCLException.getErrorCode()").isEqualTo(51);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "ZCLException.getZigBeeErrorCode()").isEqualTo(60);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "ZCLException.hasZigBeeErrorCode()").isTrue();
+		assertThat(exception.getMessage()).as(prefix + "ZCLException.getMessage()").isEqualTo(message);
 	}
 
 	/**
 	 * Tests the {@link ZDPException} class.
 	 */
+	@Test
 	public void testZDPException() {
 
 		String prefix = "ZDPException: check on 1 parameter constructor: ";
 
 		ZDPException exception = new ZDPException(message);
 
-		assertEquals(prefix + "ZDPException.getErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getErrorCode());
-		assertEquals(prefix + "ZDPException.getZigBeeErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "ZDPException.hasZigBeeErrorCode()", false, exception.hasZigBeeErrorCode());
-		assertEquals(prefix + "ZDPException.getMessage()", message, exception.getMessage());
+		assertThat(exception.getErrorCode()).as(prefix + "ZDPException.getErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "ZDPException.getZigBeeErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "ZDPException.hasZigBeeErrorCode()").isFalse();
+		assertThat(exception.getMessage()).as(prefix + "ZDPException.getMessage()").isEqualTo(message);
 
 		prefix = "ZigBeeException: check on 2 parameters constructor: ";
 
 		exception = new ZDPException(50, message);
 
-		assertEquals(prefix + "ZDPException.getErrorCode()", 50, exception.getErrorCode());
-		assertEquals(prefix + "ZDPException.getZigBeeErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "ZDPException.hasZigBeeErrorCode()", false, exception.hasZigBeeErrorCode());
-		assertEquals(prefix + "ZDPException.getMessage()", message, exception.getMessage());
+		assertThat(exception.getErrorCode()).as(prefix + "ZDPException.getErrorCode()").isEqualTo(50);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "ZDPException.getZigBeeErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "ZDPException.hasZigBeeErrorCode()").isFalse();
+		assertThat(exception.getMessage()).as(prefix + "ZDPException.getMessage()").isEqualTo(message);
 
 		prefix = "ZigBeeException: check on the 3 parameters constructor: ";
 
 		exception = new ZDPException(51, 60, message);
 
-		assertEquals(prefix + "ZDPException.getErrorCode()", 51, exception.getErrorCode());
-		assertEquals(prefix + "ZDPException.getZigBeeErrorCode()", 60, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "ZDPException.hasZigBeeErrorCode()", true, exception.hasZigBeeErrorCode());
-		assertEquals(prefix + "ZDPException.getMessage()", message, exception.getMessage());
+		assertThat(exception.getErrorCode()).as(prefix + "ZDPException.getErrorCode()").isEqualTo(51);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "ZDPException.getZigBeeErrorCode()").isEqualTo(60);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "ZDPException.hasZigBeeErrorCode()").isTrue();
+		assertThat(exception.getMessage()).as(prefix + "ZDPException.getMessage()").isEqualTo(message);
 	}
 
 	/**
 	 * Tests the {@link APSException} class.
 	 */
+	@Test
 	public void testAPSException() {
 
 		String prefix = "APSException: check on 1 parameter constructor: ";
 
 		APSException exception = new APSException(message);
 
-		assertEquals(prefix + "APSException.getErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getErrorCode());
-		assertEquals(prefix + "APSException.getZigBeeErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "APSException.hasZigBeeErrorCode()", false, exception.hasZigBeeErrorCode());
-		assertEquals(prefix + "APSException.getMessage()", message, exception.getMessage());
+		assertThat(exception.getErrorCode()).as(prefix + "APSException.getErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "APSException.getZigBeeErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "APSException.hasZigBeeErrorCode()").isFalse();
+		assertThat(exception.getMessage()).as(prefix + "APSException.getMessage()").isEqualTo(message);
 
 		prefix = "ZigBeeException: check on 2 parameters constructor: ";
 
 		exception = new APSException(50, message);
 
-		assertEquals(prefix + "APSException.getErrorCode()", 50, exception.getErrorCode());
-		assertEquals(prefix + "APSException.getZigBeeErrorCode()", ZigBeeException.UNKNOWN_ERROR, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "APSException.hasZigBeeErrorCode()", false, exception.hasZigBeeErrorCode());
-		assertEquals(prefix + "APSException.getMessage()", message, exception.getMessage());
+		assertThat(exception.getErrorCode()).as(prefix + "APSException.getErrorCode()").isEqualTo(50);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "APSException.getZigBeeErrorCode()").isEqualTo(ZigBeeException.UNKNOWN_ERROR);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "APSException.hasZigBeeErrorCode()").isFalse();
+		assertThat(exception.getMessage()).as(prefix + "APSException.getMessage()").isEqualTo(message);
 
 		prefix = "ZigBeeException: check on the 3 parameters constructor: ";
 
 		exception = new APSException(51, 60, message);
 
-		assertEquals(prefix + "APSException.getErrorCode()", 51, exception.getErrorCode());
-		assertEquals(prefix + "APSException.getZigBeeErrorCode()", 60, exception.getZigBeeErrorCode());
-		assertEquals(prefix + "APSException.hasZigBeeErrorCode()", true, exception.hasZigBeeErrorCode());
-		assertEquals(prefix + "APSException.getMessage()", message, exception.getMessage());
+		assertThat(exception.getErrorCode()).as(prefix + "APSException.getErrorCode()").isEqualTo(51);
+		assertThat(exception.getZigBeeErrorCode()).as(prefix + "APSException.getZigBeeErrorCode()").isEqualTo(60);
+		assertThat(exception.hasZigBeeErrorCode()).as(prefix + "APSException.hasZigBeeErrorCode()").isTrue();
+		assertThat(exception.getMessage()).as(prefix + "APSException.getMessage()").isEqualTo(message);
 	}
 }

@@ -18,9 +18,13 @@
 
 package org.osgi.test.cases.zigbee;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.junit.jupiter.api.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZDPException;
@@ -71,6 +75,7 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 	 * @throws Exception In case of failure.
 	 */
 
+	@Test
 	public void testExport() throws Exception {
 		log(TAG, "---- testExport");
 
@@ -87,14 +92,14 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 		 */
 		short broadcastEndpointId = 0xff;
 
-		this.registerInvalidEndpointId(getContext(), host, nodeConfig, broadcastEndpointId);
+		this.registerInvalidEndpointId(context, host, nodeConfig, broadcastEndpointId);
 
 		/*
 		 * The exported endpoint identifier must be in the range [0, 0xff)
 		 */
-		this.registerInvalidEndpointId(getContext(), host, nodeConfig, (short) 300);
+		this.registerInvalidEndpointId(context, host, nodeConfig, (short) 300);
 
-		this.registerInvalidEndpointId(getContext(), host, nodeConfig, (short) -10);
+		this.registerInvalidEndpointId(context, host, nodeConfig, (short) -10);
 	}
 
 	/**
@@ -118,7 +123,7 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 
 		ZigBeeEndpoint[] hostEndpoints = host.getEndpoints();
 
-		assertNotNull("ZigBeeHost.getEndpoints() cannot return null", hostEndpoints);
+		assertThat(hostEndpoints).as("ZigBeeHost.getEndpoints() cannot return null").isNotNull();
 
 		int initialHostEndpointsNumber = host.getEndpoints().length;
 
@@ -156,7 +161,7 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 		 * Register this ZigBeeEndpoint
 		 */
 
-		log("Register  endpoint: " + badEnpoint + " in the OSGi services registry");
+		System.out.println("Register  endpoint: " + badEnpoint + " in the OSGi services registry");
 
 		bc.registerService(ZigBeeEndpoint.class.getName(), badEnpoint, endpointProperties);
 
@@ -164,7 +169,7 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 			/*
 			 * It might takes time to register the service test framework.
 			 */
-			log("Waiting wait for a discovery timeout value of milliseconds = " + DISCOVERY_TIMEOUT);
+			System.out.println("Waiting wait for a discovery timeout value of milliseconds = " + DISCOVERY_TIMEOUT);
 			Thread.sleep(DISCOVERY_TIMEOUT);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -178,15 +183,13 @@ public class ZigBeeExportTestCase extends ZigBeeTestCases {
 		if (notExportedException == null) {
 			fail("method ZigBeeEndpoint.notExported() should have been called within the discovery timeout, as expected.");
 		} else if (notExportedException instanceof ZDPException) {
-			assertEquals("method ZigBeeEndpoint.notExported() was called with the wrong exception error code",
-					ZDPException.INVALID_EP,
-					notExportedException.getErrorCode());
+			assertThat(notExportedException.getErrorCode()).as("method ZigBeeEndpoint.notExported() was called with the wrong exception error code").isEqualTo(ZDPException.INVALID_EP);
 		} else {
 			fail("the ZigBeeEndpoint.notExported() method has been called with the wrong exception (it should be a ZDPException.INVALID_EP.");
 		}
 
 		int newNb = host.getEndpoints().length;
-		assertEquals("The number of enpoints returned by the ZigBeeHost.getEnpoints() is changed desipite the ZigBee endpoint is wrong.", newNb, initialHostEndpointsNumber);
+		assertThat(initialHostEndpointsNumber).as("The number of enpoints returned by the ZigBeeHost.getEnpoints() is changed desipite the ZigBee endpoint is wrong.").isEqualTo(newNb);
 
 	}
 

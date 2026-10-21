@@ -18,8 +18,15 @@
 
 package org.osgi.test.cases.zigbee;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.within;
+
 import java.io.EOFException;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.ZigBeeDataInput;
@@ -97,19 +104,21 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 
 	ConfigurationFileReader		conf;
 
-	protected void setUp() throws Exception {
+	@BeforeEach
+	public void setUp() throws Exception {
 		log(TAG, "Prepare for ZigBee Test Case");
 
 		prepareTestStart();
 		log(TAG, "Prepared for ZigBee Test Case");
 	}
 
-	protected void tearDown() throws Exception {
+	@AfterEach
+	public void tearDown() throws Exception {
 		log(TAG, "Tear down ZigBee Test Case");
 	}
 
 	private void prepareTestStart() throws Exception {
-		TestStepLauncher launcher = TestStepLauncher.getInstance(getContext());
+		TestStepLauncher launcher = TestStepLauncher.getInstance(context);
 
 		conf = launcher.getConfiguration();
 		minHeaderSize = conf.getHeaderMinSize();
@@ -119,6 +128,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		log(TAG, "maxHeaderSize = " + maxHeaderSize);
 	}
 
+	@Test
 	public void testZCLHeader() {
 
 		short commandId = 0x10;
@@ -141,17 +151,13 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 
 		ZCLHeader header = frame.getHeader();
 
-		assertNotNull("the getHeader() method must return a not null ZCLHeader instance", header);
-		assertEquals("ZCLHeader.isClusterSpecificCommand()",
-				isClusterSpecificCommand,
-				header.isClusterSpecificCommand());
-		assertEquals("ZCLHeader.isClientServerDirection()", isClientServerDirection, header.isClientServerDirection());
-		assertEquals("ZCLHeader.isDefaultResponseDisabled()",
-				disableDefaultResponse,
-				header.isDefaultResponseDisabled());
-		assertEquals("ZCLHeader.isManufacturerSpecific()", false, header.isManufacturerSpecific());
-		assertEquals("ZCLHeader.getManufacturerCode()", -1, header.getManufacturerCode());
-		assertEquals("ZCLHeader.getSequenceNumber()", sequenceNumber, header.getSequenceNumber());
+		assertThat(header).as("the getHeader() method must return a not null ZCLHeader instance").isNotNull();
+		assertThat(header.isClusterSpecificCommand()).as("ZCLHeader.isClusterSpecificCommand()").isEqualTo(isClusterSpecificCommand);
+		assertThat(header.isClientServerDirection()).as("ZCLHeader.isClientServerDirection()").isEqualTo(isClientServerDirection);
+		assertThat(header.isDefaultResponseDisabled()).as("ZCLHeader.isDefaultResponseDisabled()").isEqualTo(disableDefaultResponse);
+		assertThat(header.isManufacturerSpecific()).as("ZCLHeader.isManufacturerSpecific()").isFalse();
+		assertThat(header.getManufacturerCode()).as("ZCLHeader.getManufacturerCode()").isEqualTo(-1);
+		assertThat(header.getSequenceNumber()).as("ZCLHeader.getSequenceNumber()").isEqualTo(sequenceNumber);
 
 		commonChecks(frame);
 	}
@@ -161,6 +167,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 	 * specific case)
 	 */
 
+	@Test
 	public void testInternalZCLFrameImplManufacturerSpecific() {
 
 		log(TAG, "testInternalZCLFrameImpl");
@@ -187,17 +194,13 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 
 		ZCLHeader header = frame.getHeader();
 
-		assertNotNull("the getHeader() method must return a not null ZCLHeader instance", header);
-		assertEquals("ZCLHeader isClusterSpecificCommand()",
-				isClusterSpecificCommand,
-				header.isClusterSpecificCommand());
-		assertEquals("ZCLHeader disableDefaultResponse()", isClientServerDirection, header.isClientServerDirection());
-		assertEquals("ZCLHeader isDefaultResponseEnabled()",
-				disableDefaultResponse,
-				header.isDefaultResponseDisabled());
-		assertEquals("ZCLHeader isManufacturerSpecific()", true, header.isManufacturerSpecific());
-		assertEquals("ZCLHeader.getManufacturerCode()", manufacturerCode, header.getManufacturerCode());
-		assertEquals("ZCLHeader.getSequenceNumber()", sequenceNumber, header.getSequenceNumber());
+		assertThat(header).as("the getHeader() method must return a not null ZCLHeader instance").isNotNull();
+		assertThat(header.isClusterSpecificCommand()).as("ZCLHeader isClusterSpecificCommand()").isEqualTo(isClusterSpecificCommand);
+		assertThat(header.isClientServerDirection()).as("ZCLHeader disableDefaultResponse()").isEqualTo(isClientServerDirection);
+		assertThat(header.isDefaultResponseDisabled()).as("ZCLHeader isDefaultResponseEnabled()").isEqualTo(disableDefaultResponse);
+		assertThat(header.isManufacturerSpecific()).as("ZCLHeader isManufacturerSpecific()").isTrue();
+		assertThat(header.getManufacturerCode()).as("ZCLHeader.getManufacturerCode()").isEqualTo(manufacturerCode);
+		assertThat(header.getSequenceNumber()).as("ZCLHeader.getSequenceNumber()").isEqualTo(sequenceNumber);
 
 		commonChecks(frame);
 	}
@@ -207,7 +210,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		ZCLHeader header = frame.getHeader();
 
 		byte[] rawFrame = frame.getBytes();
-		assertNotNull("ZCLHeader.getBytes(): must return a valid byte array", rawFrame);
+		assertThat(rawFrame).as("ZCLHeader.getBytes(): must return a valid byte array").isNotNull();
 
 		int minFrameSize = getMinFrameSize(frame.getHeader());
 		if (rawFrame.length < minFrameSize) {
@@ -218,19 +221,19 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		 * Check getSize()
 		 */
 		int size = frame.getSize();
-		assertEquals("ZCLFrame.getSize(): must be equal to the buffer length returned by ZCLFrame.getBytes()", rawFrame.length, size);
+		assertThat(size).as("ZCLFrame.getSize(): must be equal to the buffer length returned by ZCLFrame.getBytes()").isEqualTo(rawFrame.length);
 
 		byte[] otherRawFrame = frame.getBytes();
 
-		assertNotNull("ZCLHeader.getHeader(): the must return a not null ZCLHeader instance", header);
-		assertNotSame("ZCLFrame.getBytes(): must return a different array instance each time it is called", otherRawFrame, rawFrame);
+		assertThat(header).as("ZCLHeader.getHeader(): the must return a not null ZCLHeader instance").isNotNull();
+		assertThat(rawFrame).as("ZCLFrame.getBytes(): must return a different array instance each time it is called").isNotSameAs(otherRawFrame);
 
 		ZigBeeDataInput is = frame.getDataInput();
-		assertNotNull("ZCLFrame.getInputStream() must not return null", is);
+		assertThat(is).as("ZCLFrame.getInputStream() must not return null").isNotNull();
 
 		ZigBeeDataInput isOther = frame.getDataInput();
-		assertNotNull("ZCLFrame.getDataInput(): calling this method twice must not return null", isOther);
-		assertNotSame("ZCLFrame.getDataInput(): must return a different ZigBeeDataInput instance at each call.", is, isOther);
+		assertThat(isOther).as("ZCLFrame.getDataInput(): calling this method twice must not return null").isNotNull();
+		assertThat(isOther).as("ZCLFrame.getDataInput(): must return a different ZigBeeDataInput instance at each call.").isNotSameAs(is);
 
 		/*
 		 * Check the other flavor of getBytes()
@@ -239,17 +242,18 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		byte buffer[] = new byte[size + 20];
 
 		int len = frame.getBytes(buffer);
-		assertEquals("ZCLFrame.getBuffer(byte[] buffer): the returned length must be identical to ZCLFrame.getSize()", size, len);
+		assertThat(len).as("ZCLFrame.getBuffer(byte[] buffer): the returned length must be identical to ZCLFrame.getSize()").isEqualTo(size);
 
 		/*
 		 * compares only the payload of the buffer with the payload of the raw
 		 * frame
 		 */
 		for (int i = minFrameSize; i < rawFrame.length; i++) {
-			assertEquals("ZCLFrame: the payload section of the raw frame filled by ZCLFrame.getBytes(byte[] buffer) do not match with the ZCLFrame.getBytes() at index " + i, rawFrame[i], buffer[i]);
+			assertThat(buffer[i]).as("ZCLFrame: the payload section of the raw frame filled by ZCLFrame.getBytes(byte[] buffer) do not match with the ZCLFrame.getBytes() at index " + i).isEqualTo(rawFrame[i]);
 		}
 	}
 
+	@Test
 	public void testDataInput() {
 
 		log(TAG, "testDataInput()");
@@ -285,7 +289,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		 */
 
 		try {
-			assertEquals("ZigBeeDataInput.readByte(): wrong value retrieved.", payloadTestBasic[0], dataInput.readByte());
+			assertThat(dataInput.readByte()).as("ZigBeeDataInput.readByte(): wrong value retrieved.").isEqualTo(payloadTestBasic[0]);
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input");
 		}
@@ -319,10 +323,10 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		}
 
 		try {
-			assertEquals("ZigBeeDataInput.readInt(): wrong value retrieved.", 0xfffffffa, dataInput.readInt(1));
-			assertEquals("ZigBeeDataInput.readInt(): wrong value retrieved.", 0xfffff2f1, dataInput.readInt(2));
-			assertEquals("ZigBeeDataInput.readInt(): wrong value retrieved.", 0xfff3f2f1, dataInput.readInt(3));
-			assertEquals("ZigBeeDataInput.readInt(): wrong value retrieved.", 0xf4f3f2f1, dataInput.readInt(4));
+			assertThat(dataInput.readInt(1)).as("ZigBeeDataInput.readInt(): wrong value retrieved.").isEqualTo(0xfffffffa);
+			assertThat(dataInput.readInt(2)).as("ZigBeeDataInput.readInt(): wrong value retrieved.").isEqualTo(0xfffff2f1);
+			assertThat(dataInput.readInt(3)).as("ZigBeeDataInput.readInt(): wrong value retrieved.").isEqualTo(0xfff3f2f1);
+			assertThat(dataInput.readInt(4)).as("ZigBeeDataInput.readInt(): wrong value retrieved.").isEqualTo(0xf4f3f2f1);
 		} catch (Exception e) {
 			fail("ZigBeeDataInput.readInt(): got an unexpected exception while reading from data input, ");
 		}
@@ -356,14 +360,14 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		}
 
 		try {
-			assertEquals(0xfffffffffffffffaL, dataInput.readLong(1));
-			assertEquals(0xfffffffffffff2f1L, dataInput.readLong(2));
-			assertEquals(0xfffffffffff3f2f1L, dataInput.readLong(3));
-			assertEquals(0xfffffffff4f3f2f1L, dataInput.readLong(4));
-			assertEquals(0xfffffff5f4f3f2f1L, dataInput.readLong(5));
-			assertEquals(0xfffff6f5f4f3f2f1L, dataInput.readLong(6));
-			assertEquals(0xfff7f6f5f4f3f2f1L, dataInput.readLong(7));
-			assertEquals(0xf8f7f6f5f4f3f2f1L, dataInput.readLong(8));
+			assertThat(dataInput.readLong(1)).isEqualTo(0xfffffffffffffffaL);
+			assertThat(dataInput.readLong(2)).isEqualTo(0xfffffffffffff2f1L);
+			assertThat(dataInput.readLong(3)).isEqualTo(0xfffffffffff3f2f1L);
+			assertThat(dataInput.readLong(4)).isEqualTo(0xfffffffff4f3f2f1L);
+			assertThat(dataInput.readLong(5)).isEqualTo(0xfffffff5f4f3f2f1L);
+			assertThat(dataInput.readLong(6)).isEqualTo(0xfffff6f5f4f3f2f1L);
+			assertThat(dataInput.readLong(7)).isEqualTo(0xfff7f6f5f4f3f2f1L);
+			assertThat(dataInput.readLong(8)).isEqualTo(0xf8f7f6f5f4f3f2f1L);
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input");
 		}
@@ -376,8 +380,8 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 
 		try {
 			byte[] b = dataInput.readBytes(bytes1.length);
-			assertNotNull("ZigbeeDataInput.readBytes() returned a null array", b);
-			assertEquals("ZigbeeDataInput.readBytes(): readBytes() returned a wrong number of bytes", bytes1.length, b.length);
+			assertThat(b).as("ZigbeeDataInput.readBytes() returned a null array").isNotNull();
+			assertThat(b.length).as("ZigbeeDataInput.readBytes(): readBytes() returned a wrong number of bytes").isEqualTo(bytes1.length);
 
 			boolean differs = false;
 			for (int i = 0; i < b.length; i++) {
@@ -447,25 +451,25 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		try {
 			// NaN
 			float f = dataInput.readFloat(2);
-			assertTrue("the semi-precision float read must be NaN", Float.isNaN(f));
+			assertThat(Float.isNaN(f)).as("the semi-precision float read must be NaN").isTrue();
 
 			// Zero
-			assertEquals(0.0, dataInput.readFloat(2), 0f);
+			assertThat((double) dataInput.readFloat(2)).isCloseTo(0.0, within(0d));
 
 			// Positive Infinitive
-			assertEquals(Float.POSITIVE_INFINITY, dataInput.readFloat(2), 0f);
+			assertThat(dataInput.readFloat(2)).isCloseTo(Float.POSITIVE_INFINITY, within(0f));
 
 			// Negative Infinitive
-			assertEquals(Float.NEGATIVE_INFINITY, dataInput.readFloat(2), 0f);
+			assertThat(dataInput.readFloat(2)).isCloseTo(Float.NEGATIVE_INFINITY, within(0f));
 
 			// denormalized value
-			assertEquals(1.0010069E-38f, dataInput.readFloat(2), 0f);
+			assertThat(dataInput.readFloat(2)).isCloseTo(1.0010069E-38f, within(0f));
 
 			// normalized value 1
-			assertEquals(-252.5f, dataInput.readFloat(2), 0f);
+			assertThat(dataInput.readFloat(2)).isCloseTo(-252.5f, within(0f));
 
 			// normalized value 2
-			assertEquals(118.5f, dataInput.readFloat(2), 0f);
+			assertThat(dataInput.readFloat(2)).isCloseTo(118.5f, within(0f));
 
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input");
@@ -479,25 +483,25 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 
 			// NaN
 			float f = dataInput.readFloat(4);
-			assertTrue("the semi-precision float read must be NaN", Float.isNaN(f));
+			assertThat(Float.isNaN(f)).as("the semi-precision float read must be NaN").isTrue();
 
 			// Zero
-			assertEquals(0.0, dataInput.readFloat(4), 0.00001);
+			assertThat((double) dataInput.readFloat(4)).isCloseTo(0.0, within(0.00001));
 
 			// Positive Infinitive
-			assertEquals(Float.POSITIVE_INFINITY, dataInput.readFloat(4), 0f);
+			assertThat(dataInput.readFloat(4)).isCloseTo(Float.POSITIVE_INFINITY, within(0f));
 
 			// Negative Infinitive
-			assertEquals(Float.NEGATIVE_INFINITY, dataInput.readFloat(4), 0f);
+			assertThat(dataInput.readFloat(4)).isCloseTo(Float.NEGATIVE_INFINITY, within(0f));
 
 			// denormalized value
-			assertEquals(1.0010069E-38f, dataInput.readFloat(4), 0f);
+			assertThat(dataInput.readFloat(4)).isCloseTo(1.0010069E-38f, within(0f));
 
 			// normalized value 1
-			assertEquals(-252.5f, dataInput.readFloat(4), 0f);
+			assertThat(dataInput.readFloat(4)).isCloseTo(-252.5f, within(0f));
 
 			// normalized value 2
-			assertEquals(118.5f, dataInput.readFloat(4), 0f);
+			assertThat(dataInput.readFloat(4)).isCloseTo(118.5f, within(0f));
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input");
 		}
@@ -511,25 +515,25 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		try {
 			// NaN
 			double d = dataInput.readDouble();
-			assertTrue("the semi-precision float read must be NaN", Double.isNaN(d));
+			assertThat(Double.isNaN(d)).as("the semi-precision float read must be NaN").isTrue();
 
 			// Zero
-			assertEquals(0.0, dataInput.readDouble(), 0d);
+			assertThat(dataInput.readDouble()).isCloseTo(0.0, within(0d));
 
 			// Positive Infinitive
-			assertEquals(Double.POSITIVE_INFINITY, dataInput.readDouble(), 0d);
+			assertThat(dataInput.readDouble()).isCloseTo(Double.POSITIVE_INFINITY, within(0d));
 
 			// Negative Infinitive
-			assertEquals(Double.NEGATIVE_INFINITY, dataInput.readDouble(), 0d);
+			assertThat(dataInput.readDouble()).isCloseTo(Double.NEGATIVE_INFINITY, within(0d));
 
 			// denormalized value
-			assertEquals(1.1125369292536007E-308, dataInput.readDouble(), 0d);
+			assertThat(dataInput.readDouble()).isCloseTo(1.1125369292536007E-308, within(0d));
 
 			// normalized value 1
-			assertEquals(-252.5d, dataInput.readDouble(), 0d);
+			assertThat(dataInput.readDouble()).isCloseTo(-252.5d, within(0d));
 
 			// normalized value 2
-			assertEquals(118.5d, dataInput.readDouble(), 0d);
+			assertThat(dataInput.readDouble()).isCloseTo(118.5d, within(0d));
 
 		} catch (Exception e) {
 			fail("got an unexpected exception while reading from data input");
@@ -551,6 +555,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 	 * Tests marshaling on on the ZCLHeader implementation
 	 */
 
+	@Test
 	public void testDataOutput() {
 
 		short commandId = 0x10;
@@ -700,7 +705,7 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 		if (!equals) {
 			fail("ZCLFrame.getBytes(): marshaled data is different from what it is expected, at index " + i);
 		} else {
-			assertEquals("ZCLFrame.getBytes() size", payloadTestBasic.length + offs, rawFrame.length);
+			assertThat(rawFrame.length).as("ZCLFrame.getBytes() size").isEqualTo(payloadTestBasic.length + offs);
 		}
 
 		frame = new ZCLFrameImpl(headerInit, payloadTestFloat.length + 20);
@@ -817,35 +822,35 @@ public class ZCLFrameImplTestCase extends ZigBeeTestCases {
 			 * expected to be.
 			 */
 
-			assertTrue("expected NaN", Float.isNaN(dataInput.readFloat(2)));
-			assertEquals(0f, dataInput.readFloat(2), 0f);
-			assertEquals("expected positive infinity", Float.POSITIVE_INFINITY, dataInput.readFloat(2), 0f);
-			assertEquals("expected negative infinity", Float.NEGATIVE_INFINITY, dataInput.readFloat(2), 0f);
-			assertEquals("expected positive infinity", Float.POSITIVE_INFINITY, dataInput.readFloat(2), 0f);
-			assertEquals("wrong value read", -252.5f, dataInput.readFloat(2), 0f);
-			assertEquals("wrong value read", +118.5f, dataInput.readFloat(2), 0f);
+			assertThat(Float.isNaN(dataInput.readFloat(2))).as("expected NaN").isTrue();
+			assertThat(dataInput.readFloat(2)).isCloseTo(0f, within(0f));
+			assertThat(dataInput.readFloat(2)).as("expected positive infinity").isCloseTo(Float.POSITIVE_INFINITY, within(0f));
+			assertThat(dataInput.readFloat(2)).as("expected negative infinity").isCloseTo(Float.NEGATIVE_INFINITY, within(0f));
+			assertThat(dataInput.readFloat(2)).as("expected positive infinity").isCloseTo(Float.POSITIVE_INFINITY, within(0f));
+			assertThat(dataInput.readFloat(2)).as("wrong value read").isCloseTo(-252.5f, within(0f));
+			assertThat(dataInput.readFloat(2)).as("wrong value read").isCloseTo(+118.5f, within(0f));
 
 			/*
 			 * Read back the float numbers and check if are those that are
 			 * expected to be.
 			 */
-			assertTrue("expected NaN", Float.isNaN(dataInput.readFloat(4)));
-			assertEquals(0f, dataInput.readFloat(4), 0f);
-			assertEquals("expected positive infinity", Float.POSITIVE_INFINITY, dataInput.readFloat(4), 0f);
-			assertEquals("expected negative infinity", Float.NEGATIVE_INFINITY, dataInput.readFloat(4), 0f);
-			assertEquals("wrong value read", -252.5f, dataInput.readFloat(4), 0f);
-			assertEquals("wrong value read", +118.5f, dataInput.readFloat(4), 0f);
+			assertThat(Float.isNaN(dataInput.readFloat(4))).as("expected NaN").isTrue();
+			assertThat(dataInput.readFloat(4)).isCloseTo(0f, within(0f));
+			assertThat(dataInput.readFloat(4)).as("expected positive infinity").isCloseTo(Float.POSITIVE_INFINITY, within(0f));
+			assertThat(dataInput.readFloat(4)).as("expected negative infinity").isCloseTo(Float.NEGATIVE_INFINITY, within(0f));
+			assertThat(dataInput.readFloat(4)).as("wrong value read").isCloseTo(-252.5f, within(0f));
+			assertThat(dataInput.readFloat(4)).as("wrong value read").isCloseTo(+118.5f, within(0f));
 
 			/*
 			 * Read back the double numbers and check if are those that are
 			 * expected to be.
 			 */
-			assertTrue("expected NaN", Double.isNaN(dataInput.readDouble()));
-			assertEquals(0d, dataInput.readDouble(), 0d);
-			assertEquals("expected positive infinity", Double.POSITIVE_INFINITY, dataInput.readDouble(), 0d);
-			assertEquals("expected negative infinity", Double.NEGATIVE_INFINITY, dataInput.readDouble(), 0d);
-			assertEquals("wrong value read", -252.5d, dataInput.readDouble(), 0d);
-			assertEquals("wrong value read", +118.5d, dataInput.readDouble(), 0d);
+			assertThat(Double.isNaN(dataInput.readDouble())).as("expected NaN").isTrue();
+			assertThat(dataInput.readDouble()).isCloseTo(0d, within(0d));
+			assertThat(dataInput.readDouble()).as("expected positive infinity").isCloseTo(Double.POSITIVE_INFINITY, within(0d));
+			assertThat(dataInput.readDouble()).as("expected negative infinity").isCloseTo(Double.NEGATIVE_INFINITY, within(0d));
+			assertThat(dataInput.readDouble()).as("wrong value read").isCloseTo(-252.5d, within(0d));
+			assertThat(dataInput.readDouble()).as("wrong value read").isCloseTo(+118.5d, within(0d));
 
 		} catch (Throwable e) {
 			fail("got an unexpected exception while reading from data input: " + e.getMessage());
