@@ -18,6 +18,9 @@
 
 package org.osgi.test.cases.zigbee;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.util.Collection;
@@ -26,6 +29,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
@@ -44,11 +49,14 @@ import org.osgi.test.cases.zigbee.config.file.ConfigurationFileReader;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeEndpointConfig;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeHostConfig;
 import org.osgi.test.cases.zigbee.config.file.ZigBeeNodeConfig;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
 
-abstract class ZigBeeTestCases extends DefaultTestBundleControl {
+abstract class ZigBeeTestCases {
+
+	@InjectBundleContext
+	BundleContext		context;
 
 	/**
 	 * Timeout used for the timing out all the methods belonging to the
@@ -89,15 +97,17 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	 */
 	protected static String		ZIGBEE_ENDPOINT_NOT_EXPORTED	= "(&" + ZIGBEE_ENDPOINT_FILTER + ZIGBEE_NOT_EXPORT_FILTER + ")";
 
-	protected void setUp() throws Exception {
+	@BeforeEach
+	public void setUp() throws Exception {
 		prepareTestStart();
 	}
 
-	protected void tearDown() throws Exception {
+	@AfterEach
+	public void tearDown() throws Exception {
 	}
 
 	private void prepareTestStart() throws Exception {
-		launcher = TestStepLauncher.getInstance(getContext());
+		launcher = TestStepLauncher.getInstance(context);
 		conf = launcher.getConfiguration();
 
 		/*
@@ -125,7 +135,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		String classFilter = "(objectClass=" + ZigBeeHost.class.getName() + ")";
 		String ieeeAddressFilter = "(" + ZigBeeNode.IEEE_ADDRESS + "=" + host.getIEEEAddress() + ")";
 
-		BundleContext bc = getContext();
+		BundleContext bc = context;
 
 		Filter filter;
 		try {
@@ -159,7 +169,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		String filter = "(&" + classFilter + ieeeAddressFilter + ")";
 
 		try {
-			Collection<ServiceReference<ZigBeeHost>> sRefs = getContext()
+			Collection<ServiceReference<ZigBeeHost>> sRefs = context
 					.getServiceReferences(ZigBeeHost.class, filter);
 			if (sRefs == null || (sRefs != null && sRefs.size() > 1)) {
 				fail("found more than one ZigBeeHost matching the IEEE_ADDRESS " + host.getIEEEAddress());
@@ -192,7 +202,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		String classFilter = "(objectClass=" + ZigBeeNode.class.getName() + ")";
 		String ieeeAddressFilter = "(" + ZigBeeNode.IEEE_ADDRESS + "=" + node.getIEEEAddress() + ")";
 
-		BundleContext bc = getContext();
+		BundleContext bc = context;
 
 		Filter filter;
 		try {
@@ -220,7 +230,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	protected <T> ServiceReference<T> waitForServiceReference(Class<T> clazz,
 			String filter, long timeout) {
 
-		BundleContext bc = getContext();
+		BundleContext bc = context;
 
 		ServiceTracker<T,T> st = new ServiceTracker<>(bc, clazz, null);
 		st.open();
@@ -254,7 +264,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		String filter = "(&" + ieeeAddressFilter + endpointIdFilter + ")";
 		try {
 			@SuppressWarnings("unchecked")
-			ServiceReference<ZigBeeEndpoint>[] sRefs = (ServiceReference<ZigBeeEndpoint>[]) getContext()
+			ServiceReference<ZigBeeEndpoint>[] sRefs = (ServiceReference<ZigBeeEndpoint>[]) context
 					.getAllServiceReferences(ZigBeeEndpoint.class.getName(),
 							filter);
 			if (sRefs.length > 1) {
@@ -263,7 +273,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 				fail("no ZigBeeEndpoint service mathing that present in ZigBee configuration file, found.");
 			}
 
-			return getContext().getService(sRefs[0]);
+			return context.getService(sRefs[0]);
 		} catch (InvalidSyntaxException e) {
 			fail("TCK internal error", e);
 		}
@@ -277,8 +287,8 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	 */
 	protected ZigBeeEndpoint getZigBeeEndpointService(ZigBeeEndpointConfig endpoint) {
 
-		assertNotNull(endpoint);
-		assertNotNull(endpoint.getNodeAddress());
+		assertThat(endpoint).isNotNull();
+		assertThat(endpoint.getNodeAddress()).isNotNull();
 
 		String ieeeAddressFilter = "(" + ZigBeeNode.IEEE_ADDRESS + "=" + endpoint.getNodeAddress() + ")";
 		String endpointIdFilter = "(" + ZigBeeEndpoint.ENDPOINT_ID + "=" + endpoint.getId() + ")";
@@ -286,7 +296,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		String filter = "(&" + ieeeAddressFilter + endpointIdFilter + ")";
 		try {
 			@SuppressWarnings("unchecked")
-			ServiceReference<ZigBeeEndpoint>[] sRefs = (ServiceReference<ZigBeeEndpoint>[]) getContext()
+			ServiceReference<ZigBeeEndpoint>[] sRefs = (ServiceReference<ZigBeeEndpoint>[]) context
 					.getAllServiceReferences(ZigBeeEndpoint.class.getName(),
 							filter);
 			if (sRefs != null && sRefs.length > 1) {
@@ -295,7 +305,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 				fail("no ZigBeeEndpoint service mathing that present in ZigBee configuration file, found.");
 			}
 
-			return getContext().getService(sRefs[0]);
+			return context.getService(sRefs[0]);
 		} catch (InvalidSyntaxException e) {
 			fail("TCK internal error", e);
 		}
@@ -381,6 +391,35 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 		return value;
 	}
 
+	/**
+	 * Method for logging exceptions. The tested code may throw an exception
+	 * that is a subclass of the specified, so the parameter <code>want</code>
+	 * specifies the expected class. If the parameter <code>got</code> is of the
+	 * wanted type (or a subtype of the wanted type), the classname of
+	 * <code>want</code> is logged. If <code>got</code> is of an unexpected
+	 * type, the classname of <code>got</code> is logged.
+	 * <p>
+	 * Copied unchanged from DefaultTestBundleControl of the former TCK test
+	 * support.
+	 *
+	 * @param message the log description
+	 * @param want the exception that is specified to be thrown
+	 * @param got the exception that was thrown
+	 */
+	public static void assertException(String message, Class<? extends Throwable> want,
+			Throwable got) {
+		String formatted = "";
+
+		if (message != null) {
+			formatted = message + " ";
+		}
+
+		if (!want.isInstance(got)) {
+			fail(formatted + "expected:[" + want.getName() + "] but was:["
+					+ got.getClass().getName() + "]", got);
+		}
+	}
+
 	protected static void assertPromiseFailure(Promise< ? > p, String message,
 			Class< ? extends Throwable> want) throws InterruptedException {
 		if (p.getFailure() != null) {
@@ -400,7 +439,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 			ZCLException e = (ZCLException) p.getFailure();
 
-			assertEquals(message + " " + "The exception was correct but with a wrong error code", errorCode, e.getErrorCode());
+			assertThat(e.getErrorCode()).as(message + " " + "The exception was correct but with a wrong error code").isEqualTo(errorCode);
 		} else {
 			fail(message + " " + "Promise resolved, but expected it to fail with exception: [" + want.getName() + "]");
 		}
@@ -416,7 +455,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 			ZDPException e = (ZDPException) p.getFailure();
 
-			assertEquals(message + " " + "The exception was correct but with a wrong error code", errorCode, e.getErrorCode());
+			assertThat(e.getErrorCode()).as(message + " " + "The exception was correct but with a wrong error code").isEqualTo(errorCode);
 		} else {
 			fail(message + " " + "Promise resolved, but expected it to fail with exception: [" + want.getName() + "]");
 		}
@@ -436,9 +475,9 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 	protected <K, V> void assertMapContent(String context, Map<K,V> map,
 			Class<K> keyClass, Class<V> valueClass, int expectedSize) {
-		assertNotNull(context + ": cannot return a null Map.", map);
+		assertThat(map).as(context + ": cannot return a null Map.").isNotNull();
 		if (expectedSize >= 0) {
-			assertEquals(context + " returned map size is wrong", expectedSize, map.size());
+			assertThat(map).as(context + " returned map size is wrong").hasSize(expectedSize);
 		}
 
 		Set<K> keys = map.keySet();
@@ -450,7 +489,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 			Object value = map.get(key);
 
-			assertNotNull(context + ": map contains a null value");
+			assertThat(context + ": map contains a null value").isNotNull();
 
 			if (!valueClass.isInstance(value)) {
 				fail(context + ": expected:[" + valueClass.getName() + "] but was:[" + value.getClass().getName() + "]");
@@ -494,7 +533,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	 */
 	protected void assertReadStatusRecord(String context, ZCLReadStatusRecord readStatusRecord, ZCLAttributeInfo expectedAttributeInfo, int expectedErrorCode) {
 
-		assertNotNull(context + "; ReadStatusRecord cannot be null");
+		assertThat(context + "; ReadStatusRecord cannot be null").isNotNull();
 
 		if (!expectedAttributeInfo.equals(readStatusRecord.getAttributeInfo())) {
 			fail(context + ": ReadStatusRecord.getAttributeInfo() differs in content from the expected.");
@@ -502,9 +541,9 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 
 		if (expectedErrorCode >= 0) {
 			ZigBeeException failure = readStatusRecord.getFailure();
-			assertNotNull(context + "the response is successful, BUT a failure is expected in this test case reading a invalid attribute.", failure);
+			assertThat(failure).as(context + "the response is successful, BUT a failure is expected in this test case reading a invalid attribute.").isNotNull();
 			assertException(context + ": wrong exception", ZCLException.class, failure);
-			assertEquals(context + ": the ZCL exception error code is not correct ", expectedErrorCode, ((ZCLException) failure).getErrorCode());
+			assertThat(((ZCLException) failure).getErrorCode()).as(context + ": the ZCL exception error code is not correct ").isEqualTo(expectedErrorCode);
 		}
 	}
 
@@ -527,7 +566,7 @@ abstract class ZigBeeTestCases extends DefaultTestBundleControl {
 	}
 
 	public static void log(String TAG, String message) {
-		log(TAG + " - " + message);
+		System.out.println(TAG + " - " + message);
 	}
 
 	protected String toHexString(BigInteger number, int hexDigits) {

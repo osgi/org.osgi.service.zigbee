@@ -23,7 +23,7 @@ import java.io.InputStream;
 
 import org.osgi.impl.service.zigbee.basedriver.ZigBeeBaseDriver;
 import org.osgi.impl.service.zigbee.util.Logger;
-import org.osgi.test.support.step.TestStep;
+import org.osgi.tck.step.TestStep;
 
 /**
  * An implementation of the test step based on RI simulator. This implementation

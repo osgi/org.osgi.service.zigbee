@@ -18,9 +18,13 @@
 
 package org.osgi.test.cases.zigbee;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Test;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLAttributeInfo;
 import org.osgi.service.zigbee.ZCLCluster;
@@ -67,6 +71,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 * @throws Exception In case of errors not handled by the test case.
 	 */
 
+	@Test
 	public void testWriteAttributes() throws Exception {
 
 		String context = "ZCLCluster.writeAttributes()";
@@ -75,16 +80,16 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * Locates an endpoint that have a at least one server cluster
 		 */
 		ZigBeeEndpointConfig expectedEndpoint = conf.findEndpointWithCluster(true);
-		assertNotNull(context + " unable to find in the TCK configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
+		assertThat(expectedEndpoint).as(context + " unable to find in the TCK configuration file an endpoint with at least one configured server cluster.").isNotNull();
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
-		assertNotNull(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered", endpoint);
+		assertThat(endpoint).as(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered").isNotNull();
 
 		/*
 		 * Get the first cluster present in the TCK configuration file.
 		 */
 		ZCLCluster[] clusters = endpoint.getServerClusters();
-		assertNotNull(context + ": getServerClusters() must never return null", clusters);
+		assertThat(clusters).as(context + ": getServerClusters() must never return null").isNotNull();
 
 		if (clusters.length == 0) {
 			fail(context + " the TCK configuration file states that ZigBeeEndpoint service " + printScope(expectedEndpoint) + " contains at least one server cluster");
@@ -106,7 +111,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		waitForPromise(p, INVOKE_TIMEOUT);
 		if (p.getFailure() == null) {
 			Map<Integer,Integer> map = assertPromiseValueClass(p, Map.class);
-			assertEquals(context + " expected an empty map as result of asking to write no attributes.", 0, map.size());
+			assertThat(map).as(context + " expected an empty map as result of asking to write no attributes.").isEmpty();
 		} else {
 			fail(context + " Promise failed unexpectly.", p.getFailure());
 		}
@@ -136,7 +141,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 				Boolean.valueOf(true), null,
 				ZigBeeUnsignedInteger16.getInstance());
 
-		assertNotNull("unable to find in the TCK file a CharacterSting writable attribute", attributeCoordinates);
+		assertThat(attributeCoordinates).as("unable to find in the TCK file a CharacterSting writable attribute").isNotNull();
 
 		endpoint = getZigBeeEndpointService(attributeCoordinates.expectedEndpoint);
 
@@ -149,7 +154,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		waitForPromise(p, INVOKE_TIMEOUT);
 		if (p.getFailure() == null) {
 			Map<Integer,Integer> map = assertPromiseValueClass(p, Map.class);
-			assertEquals(context + " expected an empty map as result of asking to write an attribute", 0, map.size());
+			assertThat(map).as(context + " expected an empty map as result of asking to write an attribute").isEmpty();
 		} else {
 			fail(context + " Promise failed unexpectly.", p.getFailure());
 		}
@@ -160,7 +165,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		attributeCoordinates = conf.findAttribute(Boolean.valueOf(false), null,
 				ZigBeeBoolean.getInstance());
 
-		assertNotNull("unable to find in the TCK configuration file a Boolean read-only attribute", attributeCoordinates);
+		assertThat(attributeCoordinates).as("unable to find in the TCK configuration file a Boolean read-only attribute").isNotNull();
 
 		endpoint = getZigBeeEndpointService(attributeCoordinates.expectedEndpoint);
 
@@ -173,12 +178,12 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		waitForPromise(p, INVOKE_TIMEOUT);
 		if (p.getFailure() == null) {
 			Map<Integer,Integer> map = assertPromiseValueClass(p, Map.class);
-			assertEquals(context + " expected a map with size 1 as result of asking to write a read-only attribute", 1, map.size());
+			assertThat(map).as(context + " expected a map with size 1 as result of asking to write a read-only attribute").hasSize(1);
 
 			Object s = map.get(Integer.valueOf(readOnlyAttributeInfo.getId()));
 			if (s instanceof Integer) {
 				short status = ((Integer) s).shortValue();
-				assertEquals(context + " must return an ZCLException.READ_ONLY error status.", ZCLException.READ_ONLY, status);
+				assertThat((int) status).as(context + " must return an ZCLException.READ_ONLY error status.").isEqualTo(ZCLException.READ_ONLY);
 			} else {
 				fail(context + " must return a Map<Integer, Short>");
 			}
@@ -198,12 +203,12 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		waitForPromise(p, INVOKE_TIMEOUT);
 		if (p.getFailure() == null) {
 			Map<Integer,Integer> map = assertPromiseValueClass(p, Map.class);
-			assertEquals(context + " expected a map with size 2 as result of asking to write one read-only and one undefined attribute", 2, map.size());
+			assertThat(map).as(context + " expected a map with size 2 as result of asking to write one read-only and one undefined attribute").hasSize(2);
 
 			Object s = map.get(Integer.valueOf(readOnlyAttributeInfo.getId()));
 			if (s instanceof Integer) {
 				short status = ((Integer) s).shortValue();
-				assertEquals(context + " must return an ZCLException.READ_ONLY error status.", ZCLException.READ_ONLY, status);
+				assertThat((int) status).as(context + " must return an ZCLException.READ_ONLY error status.").isEqualTo(ZCLException.READ_ONLY);
 			} else {
 				fail(context + " must return a Map<Integer, Short>");
 			}
@@ -211,7 +216,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			s = map.get(Integer.valueOf(unsupportedAttributeInfo.getId()));
 			if (s instanceof Integer) {
 				short status = ((Integer) s).shortValue();
-				assertEquals(context + " must return an ZCLException.READ_ONLY error status.", ZCLException.UNSUPPORTED_ATTRIBUTE, status);
+				assertThat((int) status).as(context + " must return an ZCLException.READ_ONLY error status.").isEqualTo(ZCLException.UNSUPPORTED_ATTRIBUTE);
 			} else {
 				fail(context + " must return a Map<Integer, Short>");
 			}
@@ -236,6 +241,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 * @throws Exception In case of errors not handled by the test case.
 	 */
 
+	@Test
 	public void testReadAttributes() throws Exception {
 		log(TAG, "starting Test testReadAttributes.");
 
@@ -244,11 +250,11 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * to read.
 		 */
 		AttributeCoordinates attributeCoord = conf.findAttribute(null, null, ZigBeeBoolean.getInstance());
-		assertNotNull("The TCK configuration file must contain at least one server cluster with an attribute of boolean data type", attributeCoord);
+		assertThat(attributeCoord).as("The TCK configuration file must contain at least one server cluster with an attribute of boolean data type").isNotNull();
 
 		ZigBeeEndpointConfig expectedEndpoint = attributeCoord.expectedEndpoint;
 		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
-		assertNotNull("expected ZigBeeEndpoint " + this.printScope(expectedEndpoint) + " not registered", endpoint);
+		assertThat(endpoint).as("expected ZigBeeEndpoint " + this.printScope(expectedEndpoint) + " not registered").isNotNull();
 
 		/*
 		 * Got the cluster where the attribute reside.
@@ -356,7 +362,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 				int key = zclAttributeInfos[i].getId();
 				ZCLReadStatusRecord readStatusRecord = map
 						.get(Integer.valueOf(key));
-				assertNotNull(context + ": requested attributeId " + zclAttributeInfos[i].getId() + " entry not found in the response map", readStatusRecord);
+				assertThat(readStatusRecord).as(context + ": requested attributeId " + zclAttributeInfos[i].getId() + " entry not found in the response map").isNotNull();
 
 				@SuppressWarnings("unused")
 				Object value = readStatusRecord.getValue();
@@ -401,15 +407,16 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 * @throws Exception In case of unexpected failure.
 	 */
 
+	@Test
 	public void testZCLAttribute() throws Exception {
 
 		AttributeCoordinates uint16attribute = conf.findAttribute(
 				Boolean.valueOf(true), null,
 				ZigBeeUnsignedInteger16.getInstance());
 
-		assertNotNull("No writeable ZigBeeUnsignedInteger16 attribute found, please modify the configuration file to add a cluster with such an attribute", uint16attribute);
+		assertThat(uint16attribute).as("No writeable ZigBeeUnsignedInteger16 attribute found, please modify the configuration file to add a cluster with such an attribute").isNotNull();
 		ZigBeeEndpoint endpoint = this.getZigBeeEndpointService(uint16attribute.expectedEndpoint);
-		assertNotNull("expected endpoint " + uint16attribute.expectedEndpoint.getId() + " not registered.", endpoint);
+		assertThat(endpoint).as("expected endpoint " + uint16attribute.expectedEndpoint.getId() + " not registered.").isNotNull();
 
 		ZCLCluster cluster = endpoint.getServerCluster(uint16attribute.expectedCluster.getId());
 
@@ -427,7 +434,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		if (p.getFailure() == null) {
 			attribute = assertPromiseValueClass(p, ZCLAttribute.class);
-			assertNotNull("ZCLCluster.getAttribute(attributeId), must never return null.", attribute);
+			assertThat(attribute).as("ZCLCluster.getAttribute(attributeId), must never return null.").isNotNull();
 		} else {
 			fail(context + ": resolved unexpectly with a failure", p.getFailure().getCause());
 		}
@@ -472,12 +479,9 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		p3 = attribute.setValue(Integer.valueOf(4));
 		waitForPromise(p3, INVOKE_TIMEOUT);
 		if (p3.getFailure() != null) {
-			fail("ZCLAttribute.setValue(): we didn't expect to fail writing a writable attribute",
-					p3.getFailure());
+			fail("ZCLAttribute.setValue(): we didn't expect to fail writing a writable attribute", p3.getFailure());
 		} else {
-			assertNull(
-					"ZCLAttribute.setValue(): expecting the promise to resolve with null, since the write was successful",
-					p3.getValue());
+			assertThat(p3.getValue()).as("ZCLAttribute.setValue(): expecting the promise to resolve with null, since the write was successful").isNull();
 		}
 
 		/*
@@ -490,14 +494,14 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		AttributeCoordinates readOnlyAttribute = conf
 				.findAttribute(Boolean.valueOf(false), null, null);
 		endpoint = this.getZigBeeEndpointService(readOnlyAttribute.expectedEndpoint);
-		assertNotNull("ZigBeeEndpoint service " + this.printScope(readOnlyAttribute.expectedEndpoint) + " not registered.", endpoint);
+		assertThat(endpoint).as("ZigBeeEndpoint service " + this.printScope(readOnlyAttribute.expectedEndpoint) + " not registered.").isNotNull();
 		cluster = endpoint.getServerCluster(readOnlyAttribute.expectedCluster.getId());
 
 		p = cluster.getAttribute(readOnlyAttribute.expectedAttributeDescription.getId());
 		waitForPromise(p, INVOKE_TIMEOUT);
 		if (p.getFailure() == null) {
 			attribute = assertPromiseValueClass(p, ZCLAttribute.class);
-			assertNotNull("ZCLCluster.getAttribute(attributeId), must never return null.", attribute);
+			assertThat(attribute).as("ZCLCluster.getAttribute(attributeId), must never return null.").isNotNull();
 		} else {
 			fail(context + ": resolved unexpectly with a failure", p.getFailure().getCause());
 		}
@@ -512,8 +516,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		waitForPromise(p2, INVOKE_TIMEOUT);
 		if (p2.getFailure() != null) {
 			fail(context
-					+ "ZCLAttribute.getValue() resolved unexpectly with a failure",
-					p2.getFailure().getCause());
+					+ "ZCLAttribute.getValue() resolved unexpectly with a failure", p2.getFailure().getCause());
 		}
 
 		Object o = p2.getValue();
@@ -537,6 +540,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 * 
 	 * @throws Exception In case of errors not handled by the test case.
 	 */
+	@Test
 	public void testGetAttribute() throws Exception {
 
 		ZCLAttribute attribute = null;
@@ -544,9 +548,9 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		String context = "ZCLCluster.getAttribute(attributeId)";
 
 		AttributeCoordinates booleanAttributeCoordinates = conf.findAttribute(null, null, ZigBeeBoolean.getInstance());
-		assertNotNull("No attribute found with the Boolean datatype, please modify the configuration file to add a cluster with such an attribute", booleanAttributeCoordinates);
+		assertThat(booleanAttributeCoordinates).as("No attribute found with the Boolean datatype, please modify the configuration file to add a cluster with such an attribute").isNotNull();
 		ZigBeeEndpoint endpoint = this.getZigBeeEndpointService(booleanAttributeCoordinates.expectedEndpoint);
-		assertNotNull("expected endpoint " + booleanAttributeCoordinates.expectedEndpoint.getId() + " not registered.", endpoint);
+		assertThat(endpoint).as("expected endpoint " + booleanAttributeCoordinates.expectedEndpoint.getId() + " not registered.").isNotNull();
 
 		ZCLCluster cluster = endpoint.getServerCluster(booleanAttributeCoordinates.expectedCluster.getId());
 
@@ -573,7 +577,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		if (p.getFailure() == null) {
 			attribute = assertPromiseValueClass(p, ZCLAttribute.class);
-			assertNotNull("ZCLCluster.getAttribute(attributeId), must never return null.", attribute);
+			assertThat(attribute).as("ZCLCluster.getAttribute(attributeId), must never return null.").isNotNull();
 		} else {
 			fail(context + ": resolved unexpectly with a failure", p.getFailure().getCause());
 		}
@@ -586,6 +590,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 * 
 	 * @throws Exception In case of errors not handled by the test case.
 	 */
+	@Test
 	public void testGetCommandIds() throws Exception {
 
 		ZigBeeNodeConfig expectedNode = conf.getFirstNode();
@@ -598,14 +603,14 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 			ZCLClusterDescription expectedCluster = expectedClusters[i];
 
 			ZCLCluster cluster = endpoint.getServerCluster(expectedCluster.getId());
-			assertNotNull("ZigBeeEndpoint.getServerCluster(clusterId) returned a null value for clusterId=" + expectedCluster.getId(), cluster);
+			assertThat(cluster).as("ZigBeeEndpoint.getServerCluster(clusterId) returned a null value for clusterId=" + expectedCluster.getId()).isNotNull();
 
 			Promise<short[]> p = cluster.getCommandIds();
 			waitForPromise(p, INVOKE_TIMEOUT);
 
 			if (p.getFailure() == null) {
 				short[] commandIds = this.assertPromiseValueClass(p, short[].class);
-				assertNotNull("ZigBeeEndpoint.getCommandIds() cannot return null", commandIds);
+				assertThat(commandIds).as("ZigBeeEndpoint.getCommandIds() cannot return null").isNotNull();
 				if (commandIds.length == 0) {
 					fail("ZigBeeCluster is empty");
 				}
@@ -645,6 +650,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 * 
 	 * @throws Exception In case of errors not handled by the test case.
 	 */
+	@Test
 	public void testGetAttributes() throws Exception {
 		log(TAG, "testGetAttributesDescriptions");
 
@@ -654,7 +660,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		ZCLCluster[] clusters = endpoint.getServerClusters();
 
-		assertNotNull("ZigBeeEndpoint.getServerClusters()", clusters);
+		assertThat(clusters).as("ZigBeeEndpoint.getServerClusters()").isNotNull();
 
 		ZCLClusterDescription[] expectedClusters = expectedEndpoint.getServerClusters();
 
@@ -675,22 +681,22 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 				ZCLAttribute[] attributes = assertPromiseValueClass(p, ZCLAttribute[].class);
 
-				assertNotNull("ZCLCluster.getAttributes() returned a null array", attributes);
+				assertThat(attributes).as("ZCLCluster.getAttributes() returned a null array").isNotNull();
 
 				ZCLAttributeDescription[] attributeDescriptions = expectedCluster.getAttributeDescriptions();
 				for (int j = 0; j < attributeDescriptions.length; j++) {
 					ZCLAttributeDescription attributeDescription = attributeDescriptions[j];
 
 					ZCLAttribute attribute = lookupAttribute(attributes, attributeDescription.getId());
-					assertNotNull("expected configuration attributeId=" + attributeDescription.getId() + " not found in the ZigBee node.", attribute);
+					assertThat(attribute).as("expected configuration attributeId=" + attributeDescription.getId() + " not found in the ZigBee node.").isNotNull();
 
 					expectedAttributesFound++;
 
-					assertEquals("configuration attributeId=" + attributeDescription.getId() + ": manufacturerCode ", attributeDescription.getManufacturerCode(), attribute.getManufacturerCode());
-					assertEquals("configuration attributeId=" + attributeDescription.getId() + ": manufacturerCode ", attributeDescription.getDataType(), attribute.getDataType());
+					assertThat(attribute.getManufacturerCode()).as("configuration attributeId=" + attributeDescription.getId() + ": manufacturerCode ").isEqualTo(attributeDescription.getManufacturerCode());
+					assertThat(attribute.getDataType()).as("configuration attributeId=" + attributeDescription.getId() + ": manufacturerCode ").isEqualTo(attributeDescription.getDataType());
 				}
 
-				assertEquals("expected attribute count differs from actual ones", attributeDescriptions.length, expectedAttributesFound);
+				assertThat(expectedAttributesFound).as("expected attribute count differs from actual ones").isEqualTo(attributeDescriptions.length);
 
 			} else {
 				fail("unexpected promise failure", p.getFailure().getCause());
@@ -710,6 +716,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 	 * 
 	 * @throws Exception In case of errors not handled by the test case.
 	 */
+	@Test
 	public void testInvoke() throws Exception {
 
 		log(TAG, "testInvoke()");
@@ -720,10 +727,10 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * Locates an endpoint that have a at least one server cluster
 		 */
 		ZigBeeEndpointConfig expectedEndpoint = conf.findEndpointWithCluster(true);
-		assertNotNull(context + " unable to find in the TCK configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
+		assertThat(expectedEndpoint).as(context + " unable to find in the TCK configuration file an endpoint with at least one configured server cluster.").isNotNull();
 
 		ZigBeeEndpoint endpoint = getZigBeeEndpointService(expectedEndpoint);
-		assertNotNull(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered", endpoint);
+		assertThat(endpoint).as(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered").isNotNull();
 
 		/*
 		 * Check for invalid arguments on the first node clusters.
@@ -758,13 +765,13 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		log(TAG, "test " + context + ": issuing a command and check the response, received on endpoint " + printScope(expectedEndpoint));
 
 		CommandCoordinates commandCoordinates = conf.findCommand(true);
-		assertNotNull(context + " unable to find in the TCK configuration file a cluster with a server command defined.", commandCoordinates);
+		assertThat(commandCoordinates).as(context + " unable to find in the TCK configuration file a cluster with a server command defined.").isNotNull();
 
 		expectedEndpoint = conf.findEndpointWithCluster(true);
-		assertNotNull(context + " unable to find in the TCK configuration file an endpoint with at least one configured server cluster.", expectedEndpoint);
+		assertThat(expectedEndpoint).as(context + " unable to find in the TCK configuration file an endpoint with at least one configured server cluster.").isNotNull();
 
 		endpoint = getZigBeeEndpointService(expectedEndpoint);
-		assertNotNull(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered", endpoint);
+		assertThat(endpoint).as(context + ": expected ZigBeeEndpoint " + printScope(expectedEndpoint) + " not registered").isNotNull();
 
 		/*
 		 * commandCoodinates.expectedCluster contains the cluster description of
@@ -805,11 +812,11 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * described in the responseCommand ZCLCommandDescriptor instance.
 		 */
 
-		assertEquals(context + ": check on response ZCLHeader.getCommandId()", responseCommand.getId(), header.getCommandId());
-		assertEquals(context + ": check on response ZCLHeader.getManufacturerCode()", responseCommand.getManufacturerCode(), header.getManufacturerCode());
-		assertEquals(context + ": check on response ZCLHeader.isClientServerDirection()", responseCommand.isClientServerDirection(), header.isClientServerDirection());
-		assertEquals(context + ": check on response ZCLHeader.isClientServerDirection()", responseCommand.isClusterSpecificCommand(), header.isClusterSpecificCommand());
-		assertEquals(context + ": check on response ZCLHeader.isClientServerDirection()", responseCommand.isManufacturerSpecific(), header.isManufacturerSpecific());
+		assertThat(header.getCommandId()).as(context + ": check on response ZCLHeader.getCommandId()").isEqualTo(responseCommand.getId());
+		assertThat(header.getManufacturerCode()).as(context + ": check on response ZCLHeader.getManufacturerCode()").isEqualTo(responseCommand.getManufacturerCode());
+		assertThat(header.isClientServerDirection()).as(context + ": check on response ZCLHeader.isClientServerDirection()").isEqualTo(responseCommand.isClientServerDirection());
+		assertThat(header.isClusterSpecificCommand()).as(context + ": check on response ZCLHeader.isClientServerDirection()").isEqualTo(responseCommand.isClusterSpecificCommand());
+		assertThat(header.isManufacturerSpecific()).as(context + ": check on response ZCLHeader.isClientServerDirection()").isEqualTo(responseCommand.isManufacturerSpecific());
 
 		/* performs generic checks on the returned ZCLFrame */
 		genericZCLFrameChecks(context, frame);
@@ -823,7 +830,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		byte[] expectedRawFrame = responseCommandImpl.getFrame();
 		byte[] actualRawFrame = frame.getBytes();
 
-		assertEquals(context + ": invalid size of returned ZCLFrame", expectedRawFrame.length, actualRawFrame.length);
+		assertThat(actualRawFrame.length).as(context + ": invalid size of returned ZCLFrame").isEqualTo(expectedRawFrame.length);
 
 		int expectedHeaderSize = header.isManufacturerSpecific() ? conf.getHeaderMaxSize() : conf.getHeaderMinSize();
 
@@ -834,7 +841,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 
 		/* we skip the header */
 		for (int i = expectedHeaderSize; i < expectedRawFrame.length; i++) {
-			assertEquals(context + ": expected and actual returned ZCL raw frames differs at index " + i, expectedRawFrame[i], actualRawFrame[i]);
+			assertThat(actualRawFrame[i]).as(context + ": expected and actual returned ZCL raw frames differs at index " + i).isEqualTo(expectedRawFrame[i]);
 		}
 	}
 
@@ -852,7 +859,7 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		ZCLHeader header = frame.getHeader();
 
 		byte[] rawFrame = frame.getBytes();
-		assertNotNull(context + ": ZCLFrame.getBytes(): must return a valid byte array", rawFrame);
+		assertThat(rawFrame).as(context + ": ZCLFrame.getBytes(): must return a valid byte array").isNotNull();
 
 		int expectedHeaderSize = header.isManufacturerSpecific() ? conf.getHeaderMaxSize() : conf.getHeaderMinSize();
 
@@ -865,19 +872,19 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		 * Check getSize()
 		 */
 		int size = frame.getSize();
-		assertEquals(context + ": ZCLFrame.getSize(): must be equal to the buffer length returned by ZCLFrame.getBytes()", rawFrame.length, size);
+		assertThat(size).as(context + ": ZCLFrame.getSize(): must be equal to the buffer length returned by ZCLFrame.getBytes()").isEqualTo(rawFrame.length);
 
 		byte[] otherRawFrame = frame.getBytes();
 
-		assertNotNull(context + ": ZCLHeader.getHeader(): the must return a not null ZCLHeader instance", header);
-		assertNotSame(context + ": ZCLFrame.getBytes(): must return a different array instance each time it is called", otherRawFrame, rawFrame);
+		assertThat(header).as(context + ": ZCLHeader.getHeader(): the must return a not null ZCLHeader instance").isNotNull();
+		assertThat(rawFrame).as(context + ": ZCLFrame.getBytes(): must return a different array instance each time it is called").isNotSameAs(otherRawFrame);
 
 		ZigBeeDataInput is = frame.getDataInput();
-		assertNotNull(context + ": ZCLFrame.getInputStream() must not return null", is);
+		assertThat(is).as(context + ": ZCLFrame.getInputStream() must not return null").isNotNull();
 
 		ZigBeeDataInput isOther = frame.getDataInput();
-		assertNotNull(context + ": ZCLFrame.getDataInput(): calling this method twice must not return null", isOther);
-		assertNotSame(context + ": ZCLFrame.getDataInput(): must return a different ZigBeeDataInput instance at each call.", is, isOther);
+		assertThat(isOther).as(context + ": ZCLFrame.getDataInput(): calling this method twice must not return null").isNotNull();
+		assertThat(isOther).as(context + ": ZCLFrame.getDataInput(): must return a different ZigBeeDataInput instance at each call.").isNotSameAs(is);
 
 		/*
 		 * Check the other flavor of getBytes()
@@ -886,16 +893,14 @@ public class ZCLClusterTestCases extends ZigBeeTestCases {
 		byte buffer[] = new byte[size + 20];
 
 		int len = frame.getBytes(buffer);
-		assertEquals(context + ": ZCLFrame.getBuffer(byte[] buffer): the returned length must be identical to ZCLFrame.getSize()", size, len);
+		assertThat(len).as(context + ": ZCLFrame.getBuffer(byte[] buffer): the returned length must be identical to ZCLFrame.getSize()").isEqualTo(size);
 
 		/*
 		 * compares only the payload of the buffer with the payload of the raw
 		 * frame
 		 */
 		for (int i = expectedHeaderSize; i < rawFrame.length; i++) {
-			assertEquals(context + ": ZCLFrame: the payload section of the raw frame filled by ZCLFrame.getBytes(byte[] buffer) do not match with the ZCLFrame.getBytes() at index " + i,
-					rawFrame[i],
-					buffer[i]);
+			assertThat(buffer[i]).as(context + ": ZCLFrame: the payload section of the raw frame filled by ZCLFrame.getBytes(byte[] buffer) do not match with the ZCLFrame.getBytes() at index " + i).isEqualTo(rawFrame[i]);
 		}
 	}
 }

@@ -21,7 +21,6 @@ package org.osgi.test.cases.zigbee.mock;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.service.zigbee.ZigBeeEvent;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -47,7 +46,7 @@ public class ZigBeeEventSourceImpl implements Runnable {
 	 * Launch this testEventSource.
 	 */
 	public void start() {
-		DefaultTestBundleControl.log("start.");
+		System.out.println("start.");
 		serviceTracker = new ServiceTracker<>(bc, ZCLEventListener.class, null);
 		serviceTracker.open();
 		thread = new Thread(this, TAG + " - Whiteboard");
@@ -58,13 +57,13 @@ public class ZigBeeEventSourceImpl implements Runnable {
 	 * Terminate this testEventSource.
 	 */
 	public void stop() {
-		DefaultTestBundleControl.log(TAG + " - stop.");
+		System.out.println(TAG + " - stop.");
 		serviceTracker.close();
 		thread = null;
 	}
 
 	public synchronized void run() {
-		DefaultTestBundleControl.log(TAG + " - run.");
+		System.out.println(TAG + " - run.");
 		Thread current = Thread.currentThread();
 		int n = 0;
 		while (current == thread) {
@@ -77,7 +76,7 @@ public class ZigBeeEventSourceImpl implements Runnable {
 				}
 
 				ZCLEventListener aZCLEventListener = listeners[n++];
-				DefaultTestBundleControl.log(TAG + " - is sending the following event: " + zigbeeEvent);
+				System.out.println(TAG + " - is sending the following event: " + zigbeeEvent);
 				aZCLEventListener.notifyEvent(zigbeeEvent);
 			}
 			try {
